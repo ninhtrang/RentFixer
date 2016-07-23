@@ -2,7 +2,7 @@ var app = angular.module("RentFixer",[]);
 app.controller("FixerListController",function($scope,$http){
     $scope.dsFixer = [];
     $scope.loadingSlick = true;
-     $http.get('http://localhost:3000/api/fixer')
+     $http.get('api/fixer')
         .success(function(data) {
             console.log(data);
             $scope.loadingSlick = false;
@@ -13,7 +13,7 @@ app.controller("FixerListController",function($scope,$http){
         });
     
     var s = '?cmnd=22222222222';
-    $http.get('http://localhost:3000/api/fixer'+s)
+    $http.get('api/fixer'+s)
     .success(function(data){
         console.log(data);
     })
@@ -38,7 +38,7 @@ app.controller("SearchController",function($scope,$http){
 //    ]
     
     $scope.dsQuan = [];
-     $http.get('http://localhost:3000/api/quan')
+     $http.get('api/quan')
         .success(function(data) {
             $scope.dsQuan = data;
             console.log($scope.dsQuan);
@@ -47,7 +47,7 @@ app.controller("SearchController",function($scope,$http){
             console.log('Error ' );
         });
     $scope.dsDichvu = [];
-    $http.get('http://localhost:3000/api/dichvu')
+    $http.get('api/dichvu')
         .success(function(data) {
             $scope.dsDichvu = data;
             console.log($scope.dsDichvu);
