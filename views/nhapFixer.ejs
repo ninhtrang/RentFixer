@@ -1,0 +1,25 @@
+<!DOCTYPE html>  
+<html lang="en">  
+    <head>
+        
+        <script src="angular/angular.js"></script>
+        <script src="javascripts/demo.js"></script>
+    </head>
+      <body ng-app="demo1" ng-controller="DemoController">
+          <p>CMND</p><input type="text" name="CMND" ng-model= "data.cmnd">
+          <p>Họ tên</p><input type="text" name="hoten" ng-model= "data.hoten">
+          <p>Ngày sinh</p><input type="text" name="ngaysinh" ng-model= "data.ngaysinh">
+          
+          <p>Số điện thoại</p><input type="number" name="sodt" ng-model= "data.sodt">
+          <p>Quê quán</p><input type="text" name="quequan" ng-model= "data.quequan">
+          <p>Quận</p><input type="text" name="quan" ng-model= "data.quan">
+          <p>Sở trường</p><input type="text" name="sotruong" ng-model= "data.sotruong" ng-list="">
+          <p>Số năm kinh nghiệm</p><input type="number" name="sonamkinhnghiem" ng-model= "data.sonamkinhnghiem">
+          <p>Mô tả kinh nghiệm</p><input type="text" name="motakinhnghiem" ng-model= "data.motakinhnghiem">
+          <p>Hình ảnh</p><input type="text" name="hinhanh" ng-model= "data.hinhanh">
+          <p>Lương</p><input type="number" name="luong" ng-model= "data.luong">
+          <p>Đánh giá</p><input type="text" name="danhgia" ng-model= "data.danhgia">
+          <p>Email</p><input type="text" name="email" ng-model= "data.email">
+          <button onclick="" ng-click="test()">save</button>
+      </body>
+</html> 
