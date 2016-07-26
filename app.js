@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var nhapFixer = require('./routes/nhapFixer');
 var nhapQuan = require('./routes/nhapQuan');
 var nhapDichvu = require('./routes/nhapDichvu');
+var nhapKhachHang = require('./routes/nhapKhachHang');
 var mongoose = require('./Database/MongoDBDriver');
 
 mongoose.connect;
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use('/nhap',nhapFixer);
 app.use('/nhapquan',nhapQuan);
 app.use('/nhapdichvu',nhapDichvu);
+app.use('/nhapkhachhang',nhapKhachHang);
 
 app.use('/', index);
 app.use('/api',require('./routes/APIFixer'));

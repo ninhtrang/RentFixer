@@ -57,3 +57,21 @@ app.controller("DichVuController", function($scope,$http){
                       })
         }
 });
+
+app.controller("KhachHangController", function($scope,$http){
+   $scope.data = {
+       
+   } 
+           $scope.test = function(){
+            alert("ssss");
+            
+            $http.post('/api/khachhang', $scope.data)
+                .then(
+                    function successCallback(response) {
+                        $scope.data={};
+                        alert("thanh cong");
+                      }, function errorCallback(response) {
+                       alert("that bai");
+                      })
+        }
+});

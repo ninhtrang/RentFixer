@@ -63,10 +63,12 @@
 	    timer: false,
             transitionDuration: 5500,
             slides: [
-                { src: "/img/slide1.jpg" },
+                { src: "img/slide15.jpg" },
                 //{ src: "/img/slide2.jpg" },
-                { src: "/img/slide3.jpg" },
-                { src: "/img/slide4.jpg" }
+                { src: "img/slide12.jpg" },
+                { src: "img/slide17.jpg" },
+                { src: "img/slide18.jpg" },
+                { src: "img/slide19.jpg" }
             ]
         });
     // Fit Text Plugin for Main Header

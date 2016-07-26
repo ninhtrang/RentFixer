@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Start Bootstrap - Creative Bootstrap Theme (http://startbootstrap.com)
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
@@ -618,7 +618,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: #02571C;
+    color: #02571c;
 }
 .boldp{
     font-weight: bold;
@@ -635,7 +635,7 @@ p {
 }
 
 .bg-primary {
-    background-color: #8CC13D;
+    background-color: #95ce8f;
 }
 
 .xanhdam {
@@ -1119,4 +1119,29 @@ img::-moz-selection {
 
 body {
     webkit-tap-highlight-color: #222;
+}
+
+.process .media-icon .icon,.process .media-icon-last .icon{
+    font-size: 60px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 8px solid #ddd;
+    display: block;
+    text-align: center;
+    line-height: 86px;
+    color: #f3eeee;
+    font-weight: bold;
+    margin: auto;
+}
+
+.process .media-icon:after {
+    background: url(../img/arrow1.png) no-repeat;
+    content: "";
+    height: 13px;
+    width: 71px;
+    position: absolute;
+    right: -10px;
+    top: 27%;
+    background-position: right;
 }
