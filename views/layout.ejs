@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="...">
+    <meta name="keywords" content="...">
+    <meta name="author" content="...">
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
+    <link href="fullcalendar/fullcalendar.css" rel="stylesheet" media="screen">
+    <link href="css/czsale.css" rel="stylesheet" media="screen">
+    <link href="css/czsale-responsive.css" rel="stylesheet" media="screen">
+    <link href="css/czsale-carousel.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/animate.min.css" type="text/css">
+    <link rel="stylesheet" href="slick/slick.css" type="text/css">
+    <link rel="stylesheet" href="slick/slick-theme.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/preload.css" type="text/css">
+  </head>
+  <body ng-app="SearchModule">
+    <div class="se-pre-con"></div>
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+      <div ng-controller="loginController" class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div id="navbar" ng-init="checkCookies()" class="navbar-collapse collapse">
+          <div layout="row" layout-align="space-between center"><a ng-href="/" target="_self"><img src="img/logo.png" alt="logo Công Ty" class="logow"></a>
+            <div ng-if="!registed">
+              <button type="button" ng-click="showDangKy()" class="marright btn btn-danger"> Đăng ký</button>
+              <button type="button" ng-click="showDangNhap()" class="marright btn btn-danger"> Đăng Nhập</button>
+            </div>
+            <div ng-show="registed">
+              <md-list-item><img alt="user" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
+                <div class="btn-group">
+                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{khachhang.hoten}}<i class="fa fa-chevron-down marleft"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><a ng-href="/taikhoan?tab=tttk" target="_self">Thông tin tài khoản</a></li>
+                    <li><a ng-href="/taikhoan?&amp;tab=lsdh" target="_self">Lịch sử đơn hàng</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" ng-click="DangXuat()">Thoát</a></li>
+                  </ul>
+                </div>
+              </md-list-item>
+            </div>
+          </div>
+        </div>
+        <!-- /.nav-collapse-->
+        <div id="DangKyForm" role="dialog" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form name="formdangky" novalidate>
+                <div class="modal-header bgxanhdam">
+                  <button type="button" ng-click="closeDangKy()" class="chutrang close">×</button>
+                  <h4 class="biggerfont modal-title chutrang">Đăng ký</h4>
+                </div>
+                <div id="mypanel" class="modal-body">
+                  <div ng-show="sdtTonTai" layout="row" layout-align="center center">
+                    <p>Số điện thoại này đã được đăng ký!</p>
+                  </div>
+                  <div ng-show="dangkyThanhCong" layout="row" layout-align="center center">
+                    <p>Đăng ký thành công</p>
+                  </div>
+                  <div layout="row" layout-align="center center" ng-show="loadingDangKy"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+                  <md-content layout-padding="">
+                    <div layout="" layout-sm="column">
+                      <md-input-container flex>
+                        <label> <i class="fa fa-user xanhnhat padright"></i>Họ tên</label>
+                        <input md-maxlength="30" required name="hoten" ng-model="khachhang.hoten" autocomplete="off">
+                        <div ng-messages="formdangky.hoten.$error">
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Tên không được quá 30 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:44%">
+                        <label> <i class="fa fa-phone xanhnhat padright"></i>Số đtdđ</label>
+                        <input md-maxlength="15" ng-pattern="/^[0-9]+$/" required name="sdt" ng-model="khachhang.sdt" autocomplete="off">
+                        <div ng-messages="formdangky.sdt.$error">
+                          <div ng-message="pattern">Số điện thoại không đúng quy định(số từ 1-9).</div>
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Số điện thoại không được nhiều hơn 30 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                      <md-input-container style="width:43%">
+                        <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                        <input autocomplete="off" ng-model="maxacnhan.nguoidung">
+                      </md-input-container>
+                      <md-button ng-click="layMaXacNhan(0)" ng-disabled="dalayMXNDK" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip>Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                      </md-button>
+                    </div>
+                    <div layout="" layout-sm="column" layout-align="space-between center">
+                      <p>{{thongbaosdt.dangky}}</p>
+                      <p>{{thongbaomaxacnhan}}</p>
+                    </div>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:87%">
+                        <label> <i class="fa fa-map-marker xanhnhat padright"></i>Địa chỉ</label>
+                        <input md-maxlength="150" required name="diachi" ng-model="khachhang.diachi" autocomplete="off">
+                        <div ng-messages="formdangky.diachi.$error">
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Địa chỉ không được nhiều hơn 150 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                      <md-button ng-click="layDiaChi()" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip>Lấy địa chỉ hiện tại</md-tooltip><i class="fa fa-map"></i>
+                      </md-button>
+                    </div>
+                    <md-checkbox ng-model="dongySuDung" class="dongySuDung">Đồng ý điều khoản sử dụng của ProCleaner</md-checkbox>
+                  </md-content>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" ng-disabled="formdangky.$invalid || kiemtraFormDangKy() || !dongySuDung" ng-click="DangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                  <button type="button" ng-click="closeDangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="DangNhapForm" role="dialog" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form name="formdangnhap" novalidate>
+                <div class="modal-header bgxanhdam">
+                  <button type="button" ng-click="closeDangNhap()" class="chutrang close">×</button>
+                  <h4 class="biggerfont modal-title chutrang">Đăng Nhập</h4>
+                </div>
+                <div id="mypanel" class="modal-body">
+                  <div ng-show="sdtKhongTonTai" layout="row" layout-align="center center">
+                    <p>Số điện thoại này không tồn tại!</p>
+                  </div>
+                  <div layout="row" layout-align="center center" ng-show="loadingDangNhap"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+                  <md-content layout-padding="">
+                    <md-input-container>
+                      <label> <i class="fa fa-phone xanhnhat padright"></i>Số đtdđ</label>
+                      <input md-maxlength="15" ng-pattern="/^[0-9]+$/" required name="sdt" ng-model="khachhang.sdt" autocomplete="off">
+                      <div ng-messages="formdangnhap.sdt.$error">
+                        <div ng-message="pattern">Số điện thoại không đúng quy định(số từ 1-9).</div>
+                        <div ng-message="required">Thông tin bắt buộc.</div>
+                        <div ng-message="md-maxlength">Số điện thoại không được nhiều hơn 30 ký tự.</div>
+                      </div>
+                    </md-input-container>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:95%">
+                        <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                        <input autocomplete="off" ng-model="maxacnhan.nguoidung">
+                      </md-input-container>
+                      <md-button ng-click="layMaXacNhan(1)" ng-disabled="dalayMXNDN" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip md-direction="left">Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                      </md-button>
+                    </div>
+                    <div layout="" layout-sm="column" layout-align="space-between center">
+                      <p>{{thongbaosdt.dangnhap}}</p>
+                      <p>{{thongbaomaxacnhan}}</p>
+                    </div>
+                  </md-content>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                  <button type="button" ng-click="closeDangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+      
+      
+      
+  </body>
+    
+    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
+  <section id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="left">
+          <div class="form-inline">
+            <h5 class="form-group i fa fa-copyright padright chutrang"> </h5>
+            <h5 class="form-group chutrang">Copyright by ProCleaner</h5>
+          </div>
+        </div>
+        <div class="right pull-right"><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-facebook"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-twitter"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-google-plus"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-linkedin"></i></a></div>
+      </div>
+    </div>
+    <!-- JS-->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <!--preload-->
+    <script src="js/preload.js"></script>
+    <script src="fullcalendar/lib/moment.min.js"></script>
+    <script src="fullcalendar/fullcalendar.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js"></script>
+    <script src="js/angular-slider.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular-cookies.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+    <script src="//code.angularjs.org/1.4.4/angular-messages.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
+    <script src="js/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script src="slick/slick.min.js"></script>
+    <script src="slick/angular/angular-slick.min.js"></script>
+    <script src="fullcalendar/angular_full_calendar.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script src="locales/bootstrap-datepicker.vi.min.js"></script>
+    <script src="js/cancelableq.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <script src="js/nya-bootstrap-select.js"></script>
+    <script src="angular/core.js"></script>
+    <script src="js/search.js"></script>
+    <!-- Custom Theme JavaScript-->
+  </section>
+</html>

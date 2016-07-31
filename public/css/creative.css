@@ -234,7 +234,7 @@ md-input-container [ng-messages] :not(.md-char-counter){
     padding: 12px 65px 12px 15px;
     display: inline-block;
     width: 100%;
-    background-color: #8CC13D;
+    background-color: #fd9e4d;
     color: #ffffff;
     position: relative;
     text-decoration: none;
@@ -345,7 +345,7 @@ table.tablebg tr:nth-of-type(odd) {
     background: #8CC13D; 
 }
 table.tablebg th { 
-    background: #02571C; 
+    background: #e6540f; 
     color: white; 
     font-weight: bold; 
 }
@@ -487,7 +487,7 @@ body{
 }
 .contactbg{
     background-image: url(../img/map-image.png);
-    background-color: rgba(2,87,28,0.8);
+    background-color: rgba(236, 136, 11, 0.86);
     position: relative;
     width: 100%;
     min-height: auto;
@@ -518,7 +518,7 @@ body{
     font-size: 40px!important;
 }
 .bgxanhdam{
-    background-color: #02571C
+    background-color: #e6540f;
 }
 
 .bgxanhnhat{
@@ -618,7 +618,11 @@ h3,
 h4,
 h5,
 h6 {
-    color: #02571c;
+    color:  rgb(25, 23, 23);
+}
+
+h1 {
+    color:  rgb(251, 248, 248);
 }
 .boldp{
     font-weight: bold;
@@ -635,18 +639,19 @@ p {
 }
 
 .bg-primary {
-    background-color: #95ce8f;
+    background-color: rgba(245, 136, 0, 0.85);
+
 }
 
 .xanhdam {
-    color: #02571C;
+    color:#e6540f;
 }
 .xanhnhat {
-    color: #8CC13D;
+    color: #f69926;
 }
 .bg-dark {
     color: white;
-    background-color: #02571C;
+    background-color: #e6540f;
 }
 
 .text-faded {
@@ -708,12 +713,12 @@ aside {
 
 .navbar-default .nav > li>a:hover,
 .navbar-default .nav>li>a:focus:hover {
-    color: #f05f40;
+    color:rgb(230, 76, 14);
 }
 
 .navbar-default .nav > li.active>a,
 .navbar-default .nav>li.active>a:focus {
-    color: #f05f40!important;
+    color: #22bd10!important;
     background-color: transparent;
 }
 
@@ -746,7 +751,7 @@ aside {
 
     .navbar-default .nav > li>a,
     .navbar-default .nav>li>a:focus {
-        color: #02571C;
+        color: rgb(230, 76, 14);
     }
 
     .navbar-default .nav > li>a:hover,
@@ -771,7 +776,7 @@ aside {
 
     .navbar-default.affix .nav > li>a,
     .navbar-default.affix .nav>li>a:focus {
-        color: #222;
+        color: rgb(230, 76, 14);
     }
 
     .navbar-default.affix .nav > li>a:hover,
@@ -805,6 +810,7 @@ header .header-content .header-content-inner h1 {
     margin-bottom: 0;
     text-transform: uppercase;
     font-weight: 600;
+    background: rgba(226, 85, 15, 0.55);
 }
 
 header .header-content .header-content-inner hr {
@@ -957,7 +963,7 @@ input[readonly] {
 }
 
 .text-primary {
-    color: #8CC13D;
+    color: #f69926;
 }
 
 .no-gutter > [class*=col-] {
@@ -1078,7 +1084,7 @@ fieldset[disabled] .btn-primary.active {
     font-weight: 700;
 }
 .btn-danger { 
-  border-color: rgba(2,34,34,.05); background-color: rgba(2,87,28,.5);
+  border-color: rgba(2,34,34,.05); background-color: rgb(230, 84, 15);
 }
 
 .btn-danger:hover,

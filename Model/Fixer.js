@@ -5,6 +5,7 @@ var mongoose = restful.mongoose;
 var FixerSchema = new mongoose.Schema({
     cmnd : {type: String, unique: true},
     hoten : String,
+    gioitinh : String,
     ngaysinh : String,
     sodt : Number,
     quequan : String,
@@ -12,6 +13,7 @@ var FixerSchema = new mongoose.Schema({
       phuong : String,
       quan : String
     },
+    trinhdohocvan : String,
     sotruong:[],
     sonamkinhnghiem : Number,
     motakinhnghiem : String,

@@ -350,14 +350,14 @@
         </div>
       </div>
       <div ng-controller="FixerListController" class="container-fluid">
-        <form id="xemchitietngvform" name="xemchitietngvform" novalidate action="/nguoi_giup_viec" ng-show="false" method="post">
-          <input type="hidden" name="idngv" value="{{data.cmnd}}">
+        <form id="xemchitietfixerform" name="xemchitietfixerform" novalidate action="/nguoi_giup_viec" ng-show="false" method="post">
+          <input type="hidden" name="idngv" value="{{cmnd}}">
         </form>
         <div class="row no-gutter">
           <div layout="row" layout-align="center center" ng-show="loadingSlick"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
           <slick settings="slickconfig" ng-if="!loadingSlick" class="slicktest">
             <div ng-repeat="fixer in dsFixer | orderBy: &quot;-sonamkinhnghiem&quot;" class="col-xs-6 col-sm-3">
-              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietNgv(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="{{fixer.hinhanh}}" alt="Ảnh đại diện" class="avatar img-responsive">
+              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietFixer(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="{{fixer.hinhanh}}" alt="Ảnh đại diện" class="avatar img-responsive">
                   <div class="portfolio-box-caption">
                     <div class="portfolio-box-caption-content">
                       <div class="project-category text-faded"> </div>

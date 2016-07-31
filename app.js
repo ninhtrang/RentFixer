@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -12,6 +13,7 @@ var nhapFixer = require('./routes/nhapFixer');
 var nhapQuan = require('./routes/nhapQuan');
 var nhapDichvu = require('./routes/nhapDichvu');
 var nhapKhachHang = require('./routes/nhapKhachHang');
+var xemChiTietFixer = require('./routes/XemChiTietFixer');
 var mongoose = require('./Database/MongoDBDriver');
 
 mongoose.connect;
@@ -31,11 +33,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: false
+}));
 
 app.use('/nhap',nhapFixer);
 app.use('/nhapquan',nhapQuan);
 app.use('/nhapdichvu',nhapDichvu);
 app.use('/nhapkhachhang',nhapKhachHang);
+app.use('/nguoi_giup_viec', xemChiTietFixer);
 
 app.use('/', index);
 app.use('/api',require('./routes/APIFixer'));

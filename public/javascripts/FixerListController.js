@@ -1,6 +1,6 @@
 (function(){
     var app = angular.module("RentFixer");
-    app.controller("FixerListController",function($scope,$http){
+    app.controller("FixerListController",function($scope,$http,$timeout){
         $scope.dsFixer = [];
         $scope.loadingSlick = true;
         $scope.slickconfig = {
@@ -25,14 +25,22 @@
                 console.log('Error ' );
             });
 
-        var s = '?cmnd=22222222222';
-        $http.get('api/fixer'+s)
-        .success(function(data){
-            console.log(data);
-        })
-        .error(function(data){
-            console.log('Error ');
-        });
+//        var s = '?cmnd=22222222222';
+//        $http.get('api/fixer'+s)
+//        .success(function(data){
+//            console.log(data);
+//        })
+//        .error(function(data){
+//            console.log('Error ');
+//        });
+        
+        $scope.xemChiTietFixer = function(id){
+			$scope.cmnd = id;
+            console.log($scope.cmnd);
+			$timeout(function(){
+				$('#xemchitietfixerform').submit();
+			},300);
+		}
 
     });
     
