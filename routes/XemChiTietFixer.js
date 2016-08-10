@@ -6,7 +6,8 @@ router.get('/', function(req, res, next) {
     console.log("ssssssaaaaa")
 	var id = req.session.idngv;
     console.log(id);
-  	res.render('Fixer_ChiTiet', {id:id});
+
+  	res.render('Fixer_ChiTiet', {id: id});
 });
 router.post('/', function(req, res, next){
 	req.session.idngv = req.body.idngv;

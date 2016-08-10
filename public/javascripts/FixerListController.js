@@ -24,15 +24,9 @@
             .error(function(data) {
                 console.log('Error ' );
             });
+        
+        // TO DO : UPDATE FIXER INFO(NGAYSINH - TUOI)
 
-//        var s = '?cmnd=22222222222';
-//        $http.get('api/fixer'+s)
-//        .success(function(data){
-//            console.log(data);
-//        })
-//        .error(function(data){
-//            console.log('Error ');
-//        });
         
         $scope.xemChiTietFixer = function(id){
 			$scope.cmnd = id;

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="...">
+    <meta name="keywords" content="...">
+    <meta name="author" content="...">
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.css">
+    <link href="fullcalendar/fullcalendar.css" rel="stylesheet" media="screen">
+    <link href="css/czsale.css" rel="stylesheet" media="screen">
+    <link href="css/czsale-responsive.css" rel="stylesheet" media="screen">
+    <link href="css/czsale-carousel.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/animate.min.css" type="text/css">
+    <link rel="stylesheet" href="slick/slick.css" type="text/css">
+    <link rel="stylesheet" href="slick/slick-theme.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
+    <link rel="stylesheet" href="css/preload.css" type="text/css">
+    <link rel="stylesheet" href="css/rent_fixer.css" type="text/css">
+  </head>
+  <body ng-app="RentFixer">
+    <div class="se-pre-con"></div>
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+      <div ng-controller="loginController" class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+        </div>
+        <div id="navbar" ng-init="checkCookies()" class="navbar-collapse collapse">
+          <div layout="row" layout-align="space-between center"><a ng-href="/" target="_self"><img src="img/logo.png" alt="logo Công Ty" class="logow"></a>
+            <div ng-if="!registed">
+              <button type="button" ng-click="showDangKy()" class="marright btn btn-danger"> Đăng ký</button>
+              <button type="button" ng-click="showDangNhap()" class="marright btn btn-danger"> Đăng Nhập</button>
+            </div>
+            <div ng-show="registed">
+              <md-list-item><img alt="user" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
+                <div class="btn-group">
+                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{khachhang.hoten}}<i class="fa fa-chevron-down marleft"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><a ng-href="/taikhoan?tab=tttk" target="_self">Thông tin tài khoản</a></li>
+                    <li><a ng-href="/taikhoan?&amp;tab=lsdh" target="_self">Lịch sử đơn hàng</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" ng-click="DangXuat()">Thoát</a></li>
+                  </ul>
+                </div>
+              </md-list-item>
+            </div>
+          </div>
+        </div>
+        <!-- /.nav-collapse-->
+        <div id="DangKyForm" role="dialog" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form name="formdangky" novalidate>
+                <div class="modal-header bgxanhdam">
+                  <button type="button" ng-click="closeDangKy()" class="chutrang close">×</button>
+                  <h4 class="biggerfont modal-title chutrang">Đăng ký</h4>
+                </div>
+                <div id="mypanel" class="modal-body">
+                  <div ng-show="sdtTonTai" layout="row" layout-align="center center">
+                    <p>Số điện thoại này đã được đăng ký!</p>
+                  </div>
+                  <div ng-show="dangkyThanhCong" layout="row" layout-align="center center">
+                    <p>Đăng ký thành công</p>
+                  </div>
+                  <div layout="row" layout-align="center center" ng-show="loadingDangKy"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+                  <md-content layout-padding="">
+                    <div layout="" layout-sm="column">
+                      <md-input-container flex>
+                        <label> <i class="fa fa-user xanhnhat padright"></i>Họ tên</label>
+                        <input md-maxlength="30" required name="hoten" ng-model="khachhang.hoten" autocomplete="off">
+                        <div ng-messages="formdangky.hoten.$error">
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Tên không được quá 30 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                    </div>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:44%">
+                        <label> <i class="fa fa-phone xanhnhat padright"></i>Số đtdđ</label>
+                        <input md-maxlength="15" ng-pattern="/^[0-9]+$/" required name="sdt" ng-model="khachhang.sdt" autocomplete="off">
+                        <div ng-messages="formdangky.sdt.$error">
+                          <div ng-message="pattern">Số điện thoại không đúng quy định(số từ 1-9).</div>
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Số điện thoại không được nhiều hơn 30 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                      <md-input-container style="width:43%">
+                        <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                        <input autocomplete="off" ng-model="maxacnhan.nguoidung">
+                      </md-input-container>
+                      <md-button ng-click="layMaXacNhan(0)" ng-disabled="dalayMXNDK" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip>Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                      </md-button>
+                    </div>
+                    <div layout="" layout-sm="column" layout-align="space-between center">
+                      <p>{{thongbaosdt.dangky}}</p>
+                      <p>{{thongbaomaxacnhan}}</p>
+                    </div>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:87%">
+                        <label> <i class="fa fa-map-marker xanhnhat padright"></i>Địa chỉ</label>
+                        <input md-maxlength="150" required name="diachi" ng-model="khachhang.diachi" autocomplete="off">
+                        <div ng-messages="formdangky.diachi.$error">
+                          <div ng-message="required">Thông tin bắt buộc.</div>
+                          <div ng-message="md-maxlength">Địa chỉ không được nhiều hơn 150 ký tự.</div>
+                        </div>
+                      </md-input-container>
+                      <md-button ng-click="layDiaChi()" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip>Lấy địa chỉ hiện tại</md-tooltip><i class="fa fa-map"></i>
+                      </md-button>
+                    </div>
+                    <md-checkbox ng-model="dongySuDung" class="dongySuDung">Đồng ý điều khoản sử dụng của ProCleaner</md-checkbox>
+                  </md-content>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" ng-disabled="formdangky.$invalid || kiemtraFormDangKy() || !dongySuDung" ng-click="DangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                  <button type="button" ng-click="closeDangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="DangNhapForm" role="dialog" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form name="formdangnhap" novalidate>
+                <div class="modal-header bgxanhdam">
+                  <button type="button" ng-click="closeDangNhap()" class="chutrang close">×</button>
+                  <h4 class="biggerfont modal-title chutrang">Đăng Nhập</h4>
+                </div>
+                <div id="mypanel" class="modal-body">
+                  <div ng-show="sdtKhongTonTai" layout="row" layout-align="center center">
+                    <p>Số điện thoại này không tồn tại!</p>
+                  </div>
+                  <div layout="row" layout-align="center center" ng-show="loadingDangNhap"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+                  <md-content layout-padding="">
+                    <md-input-container>
+                      <label> <i class="fa fa-phone xanhnhat padright"></i>Số đtdđ</label>
+                      <input md-maxlength="15" ng-pattern="/^[0-9]+$/" required name="sdt" ng-model="khachhang.sdt" autocomplete="off">
+                      <div ng-messages="formdangnhap.sdt.$error">
+                        <div ng-message="pattern">Số điện thoại không đúng quy định(số từ 1-9).</div>
+                        <div ng-message="required">Thông tin bắt buộc.</div>
+                        <div ng-message="md-maxlength">Số điện thoại không được nhiều hơn 30 ký tự.</div>
+                      </div>
+                    </md-input-container>
+                    <div layout="" layout-sm="column">
+                      <md-input-container style="width:95%">
+                        <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                        <input autocomplete="off" ng-model="maxacnhan.nguoidung">
+                      </md-input-container>
+                      <md-button ng-click="layMaXacNhan(1)" ng-disabled="dalayMXNDN" class="md-fab md-mini md-primary chutrang">
+                        <md-tooltip md-direction="left">Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                      </md-button>
+                    </div>
+                    <div layout="" layout-sm="column" layout-align="space-between center">
+                      <p>{{thongbaosdt.dangnhap}}</p>
+                      <p>{{thongbaomaxacnhan}}</p>
+                    </div>
+                  </md-content>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                  <button type="button" ng-click="closeDangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+      
+     
+<div ng-controller="SearchDetailController" ng-init="initDataFirstTime('<%= tenquan %>' ,'<%= tendichvu %>','<%= ngay %>','<%= giobd %>','<%= giokt %>')" class="container wrapper">
+  <title>ProFixer - Tìm kiếm ngắn hạn</title>
+  <div ng-show="isSearch" class="row content">
+    <div class="col-lg-3 content-left">
+      <md-toolbar class="md-whiteframe-2dp">
+        <div class="md-toolbar-tools">
+          <h4 class="chutrang"> <i class="fa fa-search"></i>  Tìm kiếm</h4>
+        </div>
+      </md-toolbar>
+      <md-content flex="" layout-padding="" class="md-whiteframe-2dp">
+        <div class="form-inline xanhnhat">
+          <md-subheader><i class="fa fa-calendar padright xanhnhat"> </i>Ngày<i class="fa fa-warning pull-right padright xanhnhat">
+              <md-tooltip md-direction="left">Thay đổi ngày sẽ mất các lựa chọn hiện tại</md-tooltip></i></md-subheader>
+          <div>
+            <input id="ngay" type="text" name="ngay" placeholder="Chọn ngày" readonly="readonly" autocomplete="off" ng-model="data.ngay" ng-change="initData()" class="marleft form-control timewidth dpindex"/>
+          </div>
+          <div>
+            <p class="red">{{thongbaongay}}</p>
+          </div>
+        </div>
+        <div class="form-inline xanhnhat">
+          <md-subheader><i class="fa fa-clock-o padright xanhnhat"> </i>Giờ<i class="fa fa-warning pull-right padright xanhnhat">
+              <md-tooltip md-direction="left">Thay đổi giờ sẽ mất các lựa chọn hiện tại</md-tooltip></i></md-subheader>
+        </div>
+        <div class="form-inline">
+          <div class="form-group">
+             <select ng-model="data.giobd" data-size="7" class="form-control sb fixWTime nya-selectpicker">
+                        <option value="" disabled>Từ giờ</option>
+                        <option ng-repeat="gio in dsGio" value="{{gio.name}}">{{gio.name}}</option>
+                      </select>
+            <input id="gbdnh" type="hidden" name="giobd1" value="{{data.giobd1}}" class="form-control sb"/>
+           <select ng-model="data.giokt" data-size="7" class="form-control sb fixWTime nya-selectpicker">
+                        <option value="" disabled>Đến giờ</option>
+                        <option ng-repeat="gio in dsGio" value="{{gio.name}}">{{gio.name}}</option>
+                      </select>
+            <input id="gktnh" type="hidden" name="giokt1" value="{{data.giokt1}}" class="form-control sb"/>
+          </div>
+          <div>
+            <p class="red">{{thongbaogio}}</p>
+          </div>
+        </div>
+        <!-- số năm kinh nghiệm ----------------------------------------------------->
+        <div class="form-inline">
+          <div class="xanhnhat">
+            <md-subheader><i class="fa fa-briefcase padright xanhnhat"> </i>Kinh Nghiệm</md-subheader>
+          </div>
+          <md-radio-group ng-model="data.sonamkn">
+            <div ng-repeat="kn in kinhnghiems">
+              <md-radio-button value="{{kn.id}}">{{kn.ten}}</md-radio-button>
+            </div>
+          </md-radio-group>
+        </div>
+        <!-- dịch vụ ----------------------------------------------------->
+        <div class="form-inline">
+          <div class="xanhnhat">
+            <md-subheader><i class="fa fa-tags padright xanhnhat"> </i>Dịch vụ</md-subheader>
+          </div>
+          <div layout="row" layout-align="center center" ng-if="loading_dichvu"><i class="fa fa-2x fa-cog fa-spin xanhnhat"></i></div>
+<!--
+          <div ng-repeat="dichvu in dichvus">
+            <md-radio-group ng-model="searchData.tendichvu" >{{dichvu.tendichvu}}</md-radio-group>
+          </div>
+-->
+                      <md-radio-group ng-model="searchData.tendichvu">
+            <div ng-repeat="dichvu in dichvus">
+              <md-radio-button value="{{dichvu.tendichvu}}">{{dichvu.tendichvu}}</md-radio-button>
+            </div>
+          </md-radio-group>
+        </div>
+        <!-- Quận ----------------------------------------------------->
+        <div class="form-inline ">
+          <div class="xanhnhat">
+            <md-subheader><i class="fa fa-map-marker padright xanhnhat"> </i>Quận<i class="fa fa-warning pull-right padright xanhnhat">
+                <md-tooltip md-direction="left">Thay đổi quận sẽ mất các lựa chọn hiện tại</md-tooltip></i></md-subheader>
+          </div>
+          <div class="my-scroll">
+          <md-radio-group ng-model="searchData.tenquan">
+            <div ng-repeat="quan in quans">
+              <md-radio-button value="{{quan.tenquan}}">{{quan.tenquan}}</md-radio-button>
+            </div>
+          </md-radio-group>
+          </div>
+        </div>
+        <input id="submitnh1" type="submit" ng-click="Search()" value="Tìm kiếm" class="form-control sb btn btn-danger">
+      </md-content>
+    </div>
+    <div class="col-lg-9 content-right">
+      <h3 class="md-headline headline">
+        <div layout="row" layout-align="center center">
+          <div flex="50" layout="row" layout-align="start center"><i class="fa fa-list xanhdam">  Danh sách người sửa chữa   </i>
+            <md-button aria-label="Use Android" class="md-fab md-primary chutrang">
+              <md-tooltip>{{'Bạn đã chọn ' + ngv_selected_arr.length + ' nhân viên!' }}</md-tooltip><i class="fa fa-user"></i>  {{ngv_selected_arr.length}}
+            </md-button>
+          </div>
+          <div flex="50" layout="row" layout-align="end center">
+            <button type="button" ng-click="show_yeucau()" class="btn btn-danger pull-right"><i class="fa fa-shopping-cart"></i> Yêu cầu sửa chữa</button>
+          </div>
+        </div>
+      </h3>
+      <div layout="row" layout-align="center center" ng-show="loading"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+      <div class="removedot" ng-hide="loading">
+        <ul>
+          <li ng-repeat="ngv in ngvs">
+            <md-card>
+              <md-card-content>
+                <div class="row selected-classifieds">
+                  <div class="col-md-3"><a href="#" ng-click="chon_ngv(ngv, ngv_selected_arr)"><img ng-src="{{ngv.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/>
+                      <md-tooltip>Bấm vào hình để chọn người sửa chữa.</md-tooltip></a>
+                    <div class="rating"><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i></div>
+                  </div>
+                  <div class="col-md-9">
+                    <div id="{{ngv.cmnd}}" ng-class="ngv_isSelected(ngv, ngv_selected_arr)" class="row selected-classifieds marbtm">
+                      <div class="col-md-12">
+                        <h2 class="headline ngv_name">{{ngv.hoten}}</h2>
+                      </div>
+                    </div>
+                    <hr class="hrnomargin"/>
+                    <div class="rightbody">
+                      <div class="row vdivide paddingrow">
+                        <div class="col-md-6">
+                          <h4 class="i fa fa-paperclip padright xanhnhat"> </h4>{{ngv.danhgia}}
+                        </div>
+                        <div class="col-md-6">
+                          <div class="row">
+                            <div class="itembody left">
+                              <h4 class="i fa fa-venus-mars padright xanhnhat"> </h4>{{ngv.gioitinh}}
+                            </div>
+                            <div class="itembody right">
+                              <h4 class="i fa fa-birthday-cake padright xanhnhat"></h4>{{(ngv.ngaysinh)}}
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="itembody left">
+                              <h4 class="i fa fa-briefcase padright xanhnhat"></h4>{{ngv.sonamkinhnghiem + ' năm kinh nghiệm'}}
+                            </div>
+                            <div class="itembody right">
+                              <h4 class="i fa fa-map-marker padright xanhnhat"></h4>{{ngv.diachi.quan}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <h4 class="i fa fa-tags padright xanhnhat"></h4>Sở trường<br/>
+                      <input ng-repeat="st in ngv.sotruong" type="button" value="{{st}}" class="btn btn-danger btn-xs tagmargin"/>
+                    </div>
+                    <hr class="hrnomargin"/>
+                    <div class="rightfooter">
+                      <button type="button" ng-click="show_detail(ngv)" class="btn btn-danger pull-right"><i class="fa fa-arrow-right"></i> Thông tin chi tiết</button>
+                    </div>
+                  </div>
+                </div>
+              </md-card-content>
+            </md-card>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div ng-if="isDetail" class="row content">
+    <div>
+      <div ng-repeat="ngv in ngvs" ng-if="checkcmnd(ngv.cmnd)" class="col-md-9 col-md-push-3 content-right">
+        <h4>Thông tin chi tiết</h4>
+        <div class="row">
+          <div class="col-md-4"><a href="#"><img ng-src="{{ngv.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
+            <div class="rating"><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i></div>
+          </div>
+          <div class="col-md-8">
+            <div layout="row" layout-align="start start" class="div"><i class="fa fa-user fa-2x padright xanhnhat"></i>
+              <p class="detailname">{{' ' + ngv.hoten}}</p>
+            </div>
+            <hr class="hrmargintop"/>
+            <div class="row">
+              <div class="col-md-12">
+                <div layout="row" class="div">
+                  <div flex="30">
+                    <h3 class="i fa fa-map-marker padright xanhnhat"> </h3>{{ngv.diachi.quan}}
+                  </div>
+                  <div flex="50">
+                    <h3 class="i fa fa-venus-mars padright xanhnhat"> </h3>{{ngv.gioitinh}}
+                  </div>
+                  <div flex="20">
+                    <h3 class="i fa fa-graduation-cap padright xanhnhat"> </h3>{{ngv.trinhdohocvan}}
+                  </div>
+                </div>
+                <div layout="row" class="div">
+                  <div flex="30">
+                    <h3 class="i fa fa-birthday-cake padright xanhnhat"> </h3>{{tinh_tuoi_ngv(ngv.ngaysinh)+' tuổi'}}
+                  </div>
+                  <div flex="50">
+                    <h3 class="i fa fa-briefcase padright xanhnhat"> </h3>{{ngv.sonamkinhnghiem}} năm kinh nghiệm
+                  </div>
+                  <div flex="20">
+                    <h3 class="i fa fa-heart padright xanhnhat"> </h3>{{ngv.tinhtranghonnhan}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size: 15px;" class="row form-inline">
+              <div class="col-md-12">
+                <h3 class="i fa fa-tags padright xanhnhat"> </h3>Sở trường
+                <div class="form-group">
+                  <input ng-repeat="st in ngv.sotruong" type="button" value="{{st}}" class="btn btn-danger btn-xs tagmargin"/>
+                </div>
+              </div>
+            </div>
+            <hr class="hrmarginbtm"/>
+            <div layout="row" layout-align="end start">
+              <div>
+                <button type="button" ng-click="return_search()" class="marleftbtn btn btn-danger pull-right"><i class="fa fa-arrow-left"></i> Quay lại</button>
+              </div>
+              <div>
+                <button type="button" ng-click="chon_ngv_detail(ngv)" ng-if="isSelected(ngv, &quot;chon&quot;, ngv_selected_arr)" class="marleftbtn btn btn-danger pull-right"><i class="fa fa-suitcase"></i> Chọn nhân viên</button>
+              </div>
+              <div>
+                <button type="button" ng-click="chon_ngv_detail(ngv)" ng-if="isSelected(ngv, &quot;huy&quot;, ngv_selected_arr)" class="marleftbtn btn btn-danger pull-right"><i class="fa fa-undo"></i> Bỏ chọn</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row tabmartop">
+          <div class="col-md-12">
+            <md-tabs md-dynamic-height="" md-border-bottom="">
+              <md-tab>
+                <md-tab-label><i class="fa fa-paperclip"></i>   Đánh giá chung</md-tab-label>
+                <md-tab-body>
+                  <md-content class="md-padding">
+                    <h1 class="md-display-2 center">Đánh giá chung</h1>
+                    <p>{{ngv.danhgia}}</p>
+                  </md-content>
+                </md-tab-body>
+              </md-tab>
+              <md-tab>
+                <md-tab-label><i class="fa fa-history"></i>   Mô tả kinh nghiệm</md-tab-label>
+                <md-tab-body>
+                  <md-content class="md-padding">
+                    <h1 class="md-display-2 center">Mô tả kinh nghiệm</h1>
+                    <p>{{ngv.motakinhnghiem}}</p>
+                  </md-content>
+                </md-tab-body>
+              </md-tab>
+              <md-tab>
+                <md-tab-label><i class="fa fa-exclamation-circle"></i>   Thông tin chi tiết</md-tab-label>
+                <md-tab-body>
+                  <md-content class="md-padding">
+                    <h1 class="md-display-2 center">Thông tin chi tiết </h1>
+                    <p>- Cân nặng : {{ngv.cannang}} kg.</p>
+                    <p>- Chiều cao : {{ngv.chieucao}} cm.</p>
+                    <p>- Dân tộc : Kinh.</p>
+                    <p>- Trình độ học vấn : {{ngv.trinhdohocvan}}.</p>
+                    <p>- Tình trạng hôn nhân : {{ngv.tinhtranghonnhan}}.</p>
+                    <p ng-show="ngv.tinhtranghonnhan!=&quot;Độc thân&quot;">- Con cái : {{ngv.thongtincon.length}}</p>
+                    <p ng-show="ngv.tinhtranghonnhan!=&quot;Độc thân&quot;" ng-repeat="con in ngv.thongtincon" class="padleft">• Tuổi : {{con.tuoi}}</p>
+                  </md-content>
+                </md-tab-body>
+              </md-tab>
+              <md-tab>
+                <md-tab-label><i class="fa fa-stethoscope"></i>   Giấy khám sức khỏe</md-tab-label>
+                <md-tab-body>
+                  <md-content class="md-padding">
+                    <h1 class="md-display-2 center">Giấy khám sức khỏe
+                      <slick settings="slickconfig" ng-if="numberLoaded" class="slicktest">
+                        <div ng-repeat="gksk in ngv.giaykhamsuckhoe"><img ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + gksk}}" alt="Giấy khám sức khỏe" class="center img-responsive"/></div>
+                      </slick>
+                    </h1>
+                  </md-content>
+                </md-tab-body>
+              </md-tab>
+            </md-tabs>
+          </div>
+        </div>
+        <hr class="hrmargin"/>
+      </div>
+      <div class="col-md-3 col-md-pull-9 content-left">
+        <h4>Nhân viên tương đồng</h4>
+        <div ng-if="ngv_sub1!=null" class="row">
+          <div class="thumbnail sm-img-left"><a href="#" ng-click="show_detail(ngv_sub1)" class="center portfolio-box"><img ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + ngv_sub1.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
+            <div class="caption center">
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-user xanhnhat marbtm padright"></h5>{{ngv_sub1.hoten}}
+                </div>
+                <div class="right padrightngv"></div>
+              </div>
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-briefcase xanhnhat marbtm padright"></h5>{{ngv_sub1.sonamkinhnghiem + ' năm kinh nghiệm'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{tinh_tuoi_ngv(ngv_sub1.ngaysinh) + ' tuổi'}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="ngv_sub2!=null" class="row">
+          <div class="thumbnail sm-img-left"><a href="#" ng-click="show_detail(ngv_sub2)" class="center portfolio-box"><img ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + ngv_sub2.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
+            <div class="caption center">
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-user xanhnhat marbtm padright"></h5>{{ngv_sub2.hoten}}
+                </div>
+                <div class="right padrightngv"></div>
+              </div>
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-briefcase xanhnhat marbtm padright"></h5>{{ngv_sub2.sonamkinhnghiem + ' năm kinh nghiệm'}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="left padleft">
+                  <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{tinh_tuoi_ngv(ngv_sub2.ngaysinh) + ' tuổi'}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="isThanhToan" class="row content">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <div class="md-whiteframe-5dp">
+        <form name="formthanhtoan" novalidate="novalidate">
+          <div class="modal-header">
+            <h4 class="biggerfont modal-title xanhdam center">Thông tin yêu cầu</h4>
+          </div>
+          <div id="mypanel" class="modal-body">
+            <div layout="row" layout-align="center center" ng-if="loading_yeucau" class="modal-thanhtoan-height"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
+            <div layout="row" layout-align="center center" ng-if="hoanthanh_thanhtoan_nh" class="modal-thanhtoan-height">
+              <h3>Yêu cầu của quý khách đã được chấp nhận, chúng tôi sẽ liên hệ trong lịch làm việc gần nhất.</h3>
+            </div>
+            <md-content layout-padding="" ng-if="!(loading_yeucau || hoanthanh_thanhtoan_nh)">
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:44%">
+                  <label> <i class="fa fa-phone xanhnhat padright"></i>Số đtdđ</label>
+                  <input md-maxlength="15" ng-pattern="/^[0-9]+$/" required="required" name="sdt" ng-model="khachhang.sdt" autocomplete="off"/>
+                  <div ng-messages="formthanhtoan.sdt.$error">
+                    <div ng-message="pattern">Số điện thoại không đúng quy định(số từ 1-9).</div>
+                    <div ng-message="required">Thông tin bắt buộc.</div>
+                    <div ng-message="md-maxlength">Số điện thoại không được nhiều hơn 30 ký tự.</div>
+                  </div>
+                </md-input-container>
+                <md-input-container style="width:43%">
+                  <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                  <input autocomplete="off" ng-model="maxacnhan.nguoidung"/>
+                </md-input-container>
+                <md-button ng-click="layMaXacNhan()" ng-disabled="dalayMXN" class="md-fab md-mini md-primary chutrang">
+                  <md-tooltip md-direction="left">Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                </md-button>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container flex="flex">
+                  <label> <i class="fa fa-user xanhnhat padright"></i>Họ tên</label>
+                  <input md-maxlength="30" required="required" name="hoten" ng-model="khachhang.hoten" autocomplete="off"/>
+                  <div ng-messages="formthanhtoan.hoten.$error">
+                    <div ng-message="required">Thông tin bắt buộc.</div>
+                    <div ng-message="md-maxlength">Tên không được quá 30 ký tự.</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:87%">
+                  <label> <i class="fa fa-map-marker xanhnhat padright"></i>Địa chỉ</label>
+                  <input md-maxlength="150" required="required" name="diachi" ng-model="khachhang.diachi" autocomplete="off"/>
+                  <div ng-messages="formthanhtoan.diachi.$error">
+                    <div ng-message="required">Thông tin bắt buộc.</div>
+                    <div ng-message="md-maxlength">Địa chỉ không được nhiều hơn 150 ký tự.</div>
+                  </div>
+                </md-input-container>
+                <md-button ng-click="layDiaChi()" class="md-fab md-mini md-primary chutrang">
+                  <md-tooltip md-direction="left">Lấy địa chỉ hiện tại</md-tooltip><i class="fa fa-map"></i>
+                </md-button>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:87%">
+                  <label><i class="fa fa-map-marker xanhnhat padright"></i>Thành phố</label>
+                  <input value="Tp.Hồ Chí Minh" disabled="disabled"/>
+                </md-input-container>
+                <md-input-container style="width:87%">
+                  <label> <i class="fa fa-map-marker xanhnhat padright"></i>Quận</label>
+                  <input value="{{data.quan}}" disabled="disabled"/>
+                </md-input-container>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:50%">
+                  <label> <i class="fa fa-calendar xanhnhat padright"></i>Ngày</label>
+                  <input disabled="disabled" ng-model="data.ngay"/>
+                </md-input-container>
+                <md-input-container style="width:25%">
+                  <label> <a class="i fa fa-clock-o xanhnhat padright"></a>Giờ bắt đầu</label>
+                  <input disabled="disabled" value="{{Math.floor(data.giobd1/60)+&quot;:&quot;+data.giobd1%60}}"/>
+                </md-input-container>
+                <md-input-container style="width:25%">
+                  <label> <a class="i fa fa-clock-o xanhnhat padright"></a>Giờ kết thúc</label>
+                  <input disabled="disabled" value="{{Math.floor(data.giokt1/60)+&quot;:&quot;+data.giokt1%60}}"/>
+                </md-input-container>
+              </div>
+              <div layout="column" layout-sm="column">
+                <div layout="row"><i class="fa fa-tag xanhnhat padright"></i>Dịch vụ</div>
+                <div layout="row" layout-wrap="" flex="">
+                  <div ng-repeat="tieuchi in tieuchis" flex="50">
+                    <md-checkbox ng-model="tieuchi.data" disabled="disabled" ng-click="them_filter_dichvu(tieuchi.ten, tieuchi.data, data)" class="md-primary">{{tieuchi.ten}}</md-checkbox>
+                  </div>
+                </div>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:50%">
+                  <label> <a class="i fa fa-money xanhnhat padright"></a>Phí cơ bản</label>
+                  <input disabled="disabled" value="{{showPhiCoBan()+&quot;  VNĐ&quot;}}"/>
+                </md-input-container>
+                <md-input-container style="width:25%">
+                  <label> <a class="i fa fa-money xanhnhat padright"></a>Phí ngoài giờ</label>
+                  <input disabled="disabled" value="{{showPhiNgoaiGio()+&quot;  VNĐ&quot;}}"/>
+                </md-input-container>
+                <md-input-container style="width:25%">
+                  <label> <a class="i fa fa-money xanhnhat padright"></a>Phụ phí</label>
+                  <input disabled="disabled" value="{{showTrangThaiYc()}}"/>
+                </md-input-container>
+              </div>
+              <div layout="" layout-sm="column">
+                <md-input-container style="width:50%">
+                  <label> <a class="i fa fa-money xanhnhat padright"></a>Tổng chi phí</label>
+                  <input disabled="disabled" value="{{tinhtien_nh()+&quot;  VNĐ&quot;}}"/>
+                </md-input-container>
+              </div>
+              <div layout="row" layout-sm="column">
+                <md-list ng-cloak="ng-cloak" style="width:100%">
+                  <p>Danh sách nhân viên đã chọn.</p>
+                  <md-divider></md-divider>
+                  <md-list-item ng-repeat="ngv in ngv_selected_arr"><img alt="Ảnh đại diện" ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + ngv.hinhanh}}" class="md-avatar"/>
+                    <p>{{ngv.hoten}}</p>
+                  </md-list-item>
+                </md-list>
+              </div>
+            </md-content>
+          </div>
+          <div ng-if="!loading_yeucau &amp;&amp; !hoanthanh_thanhtoan_nh" class="modal-footer">
+            <button type="submit" ng-disabled="formthanhtoan.$invalid" ng-click="luu_yeucau()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+            <button type="button" ng-click="close_thanhtoan()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
+          </div>
+          <div ng-if="hoanthanh_thanhtoan_nh" class="modal-footer">
+            <button type="button" ng-click="hoanthanh_thanhtoan(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Xem lịch sử đơn hàng</button>
+            <button type="button" ng-click="hoanthanh_thanhtoan(2)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Về trang chủ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+</div>
+      
+      
+  </body>
+    
+    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
+  <section id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="left">
+          <div class="form-inline">
+            <h5 class="form-group i fa fa-copyright padright chutrang"> </h5>
+            <h5 class="form-group chutrang">Copyright by ProFixer</h5>
+          </div>
+        </div>
+        <div class="right pull-right"><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-facebook"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-twitter"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-google-plus"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-linkedin"></i></a></div>
+      </div>
+    </div>
+    <!-- JS-->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <!--preload-->
+    <script src="js/preload.js"></script>
+    <script src="fullcalendar/lib/moment.min.js"></script>
+    <script src="fullcalendar/fullcalendar.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-touch.min.js"></script>
+    <script src="js/angular-slider.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular-cookies.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+    <script src="//code.angularjs.org/1.4.4/angular-messages.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc1/angular-material.min.js"></script>
+    <script src="js/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script src="slick/slick.min.js"></script>
+    <script src="slick/angular/angular-slick.min.js"></script>
+    <script src="fullcalendar/angular_full_calendar.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script src="locales/bootstrap-datepicker.vi.min.js"></script>
+    <script src="js/cancelableq.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <script src="js/nya-bootstrap-select.js"></script>
+<!--    <script src="angular/core.js"></script>-->
+      <script src= "javascripts/angular-modules.js"></script>
+      <script src= "javascripts/factory/FixerFactory.js"></script>
+      <script src= "javascripts/factory/DataFactory.js"></script>
+      <script src= "javascripts/SearchDetailController.js"></script>
+      <script src= "javascripts/LoginController.js"></script>
+    <script src="js/search.js"></script>
+    <!-- Custom Theme JavaScript-->
+  </section>
+</html>

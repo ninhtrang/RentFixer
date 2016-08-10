@@ -14,6 +14,7 @@ var nhapQuan = require('./routes/nhapQuan');
 var nhapDichvu = require('./routes/nhapDichvu');
 var nhapKhachHang = require('./routes/nhapKhachHang');
 var xemChiTietFixer = require('./routes/XemChiTietFixer');
+var search = require('./routes/Search');
 var mongoose = require('./Database/MongoDBDriver');
 
 mongoose.connect;
@@ -44,7 +45,7 @@ app.use('/nhapquan',nhapQuan);
 app.use('/nhapdichvu',nhapDichvu);
 app.use('/nhapkhachhang',nhapKhachHang);
 app.use('/nguoi_giup_viec', xemChiTietFixer);
-
+app.use('/search', search);
 app.use('/', index);
 app.use('/api',require('./routes/APIFixer'));
 

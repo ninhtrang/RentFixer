@@ -5,6 +5,7 @@
         $scope.ngvDcChon = {};
         $scope.loading = true;
         $scope.initData = function(id){
+       
             idngv = id;
             $http.get('api/fixer?cmnd='+idngv)
             .success(function(data){
