@@ -176,7 +176,7 @@
      
 <div ng-controller="SearchDetailController" ng-init="initDataFirstTime('<%= tenquan %>' ,'<%= tendichvu %>','<%= ngay %>','<%= giobd %>','<%= giokt %>')" class="container wrapper">
   <title>ProFixer - Tìm kiếm ngắn hạn</title>
-  <div ng-show="isSearch" class="row content">
+  <div ng-hide="isDetail" class="row content">
     <div class="col-lg-3 content-left">
       <md-toolbar class="md-whiteframe-2dp">
         <div class="md-toolbar-tools">
@@ -280,12 +280,12 @@
             <md-card>
               <md-card-content>
                 <div class="row selected-classifieds">
-                  <div class="col-md-3"><a href="#" ng-click="chon_ngv(ngv, ngv_selected_arr)"><img ng-src="{{ngv.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/>
-                      <md-tooltip>Bấm vào hình để chọn người sửa chữa.</md-tooltip></a>
+                  <div class="col-md-3"><img ng-click="chon_ngv(ngv)" ng-src="{{ngv.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/>
+                      <md-tooltip>Bấm vào hình để chọn người sửa chữa.</md-tooltip>
                     <div class="rating"><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i></div>
                   </div>
                   <div class="col-md-9">
-                    <div id="{{ngv.cmnd}}" ng-class="ngv_isSelected(ngv, ngv_selected_arr)" class="row selected-classifieds marbtm">
+                    <div id="{{ngv.cmnd}}" class="row selected-classifieds marbtm">
                       <div class="col-md-12">
                         <h2 class="headline ngv_name">{{ngv.hoten}}</h2>
                       </div>
@@ -333,42 +333,40 @@
       </div>
     </div>
   </div>
-  <div ng-if="isDetail" class="row content">
+  <div ng-show="isDetail" class="row content">
     <div>
-      <div ng-repeat="ngv in ngvs" ng-if="checkcmnd(ngv.cmnd)" class="col-md-9 col-md-push-3 content-right">
+<!--      <div ng-repeat="ngv in ngvs" ng-if="checkcmnd(ngv.cmnd)" class="col-md-9 col-md-push-3 content-right">-->
         <h4>Thông tin chi tiết</h4>
         <div class="row">
-          <div class="col-md-4"><a href="#"><img ng-src="{{ngv.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
+          <div class="col-md-4"><a href="#"><img ng-src="{{ngscDcChon.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
             <div class="rating"><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i><i class="fa fa-2x fa-star-o xanhnhat"></i></div>
           </div>
           <div class="col-md-8">
             <div layout="row" layout-align="start start" class="div"><i class="fa fa-user fa-2x padright xanhnhat"></i>
-              <p class="detailname">{{' ' + ngv.hoten}}</p>
+              <p class="detailname">{{' ' + ngscDcChon.hoten}}</p>
             </div>
             <hr class="hrmargintop"/>
             <div class="row">
               <div class="col-md-12">
                 <div layout="row" class="div">
                   <div flex="30">
-                    <h3 class="i fa fa-map-marker padright xanhnhat"> </h3>{{ngv.diachi.quan}}
+                    <h3 class="i fa fa-map-marker padright xanhnhat"> </h3>{{ngscDcChon.diachi.quan}}
                   </div>
                   <div flex="50">
-                    <h3 class="i fa fa-venus-mars padright xanhnhat"> </h3>{{ngv.gioitinh}}
+                    <h3 class="i fa fa-venus-mars padright xanhnhat"> </h3>{{ngscDcChon.gioitinh}}
                   </div>
                   <div flex="20">
-                    <h3 class="i fa fa-graduation-cap padright xanhnhat"> </h3>{{ngv.trinhdohocvan}}
+                    <h3 class="i fa fa-graduation-cap padright xanhnhat"> </h3>{{ngscDcChon.trinhdohocvan}}
                   </div>
                 </div>
                 <div layout="row" class="div">
                   <div flex="30">
-                    <h3 class="i fa fa-birthday-cake padright xanhnhat"> </h3>{{tinh_tuoi_ngv(ngv.ngaysinh)+' tuổi'}}
+                    <h3 class="i fa fa-birthday-cake padright xanhnhat"> </h3>{{ngscDcChon.ngaysinh}}
                   </div>
                   <div flex="50">
-                    <h3 class="i fa fa-briefcase padright xanhnhat"> </h3>{{ngv.sonamkinhnghiem}} năm kinh nghiệm
+                    <h3 class="i fa fa-briefcase padright xanhnhat"> </h3>{{ngscDcChon.sonamkinhnghiem}} năm kinh nghiệm
                   </div>
-                  <div flex="20">
-                    <h3 class="i fa fa-heart padright xanhnhat"> </h3>{{ngv.tinhtranghonnhan}}
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -376,7 +374,7 @@
               <div class="col-md-12">
                 <h3 class="i fa fa-tags padright xanhnhat"> </h3>Sở trường
                 <div class="form-group">
-                  <input ng-repeat="st in ngv.sotruong" type="button" value="{{st}}" class="btn btn-danger btn-xs tagmargin"/>
+                  <input ng-repeat="st in ngscDcChon.sotruong" type="button" value="{{st}}" class="btn btn-danger btn-xs tagmargin"/>
                 </div>
               </div>
             </div>
@@ -402,7 +400,7 @@
                 <md-tab-body>
                   <md-content class="md-padding">
                     <h1 class="md-display-2 center">Đánh giá chung</h1>
-                    <p>{{ngv.danhgia}}</p>
+                    <p>{{ngscDcChon.danhgia}}</p>
                   </md-content>
                 </md-tab-body>
               </md-tab>
@@ -411,7 +409,7 @@
                 <md-tab-body>
                   <md-content class="md-padding">
                     <h1 class="md-display-2 center">Mô tả kinh nghiệm</h1>
-                    <p>{{ngv.motakinhnghiem}}</p>
+                    <p>{{ngscDcChon.motakinhnghiem}}</p>
                   </md-content>
                 </md-tab-body>
               </md-tab>
@@ -420,12 +418,12 @@
                 <md-tab-body>
                   <md-content class="md-padding">
                     <h1 class="md-display-2 center">Thông tin chi tiết </h1>
-                    <p>- Cân nặng : {{ngv.cannang}} kg.</p>
-                    <p>- Chiều cao : {{ngv.chieucao}} cm.</p>
+                    <p>- Cân nặng : {{ngscDcChon.cannang}} kg.</p>
+                    <p>- Chiều cao : {{ngscDcChon.chieucao}} cm.</p>
                     <p>- Dân tộc : Kinh.</p>
-                    <p>- Trình độ học vấn : {{ngv.trinhdohocvan}}.</p>
-                    <p>- Tình trạng hôn nhân : {{ngv.tinhtranghonnhan}}.</p>
-                    <p ng-show="ngv.tinhtranghonnhan!=&quot;Độc thân&quot;">- Con cái : {{ngv.thongtincon.length}}</p>
+                    <p>- Trình độ học vấn : {{ngscDcChon.trinhdohocvan}}.</p>
+                    <p>- Tình trạng hôn nhân : {{ngscDcChon.tinhtranghonnhan}}.</p>
+                    <p ng-show="ngv.tinhtranghonnhan!=&quot;Độc thân&quot;">- Con cái : {{ngscDcChon.thongtincon.length}}</p>
                     <p ng-show="ngv.tinhtranghonnhan!=&quot;Độc thân&quot;" ng-repeat="con in ngv.thongtincon" class="padleft">• Tuổi : {{con.tuoi}}</p>
                   </md-content>
                 </md-tab-body>
@@ -446,7 +444,7 @@
           </div>
         </div>
         <hr class="hrmargin"/>
-      </div>
+<!--      </div>-->
       <div class="col-md-3 col-md-pull-9 content-left">
         <h4>Nhân viên tương đồng</h4>
         <div ng-if="ngv_sub1!=null" class="row">

@@ -40,6 +40,24 @@ var app = angular.module("demo1", []);
         }
     });
 
+app.controller("AccountController", function($scope,$http){
+   $scope.data = {
+       
+   } 
+           $scope.test = function(){
+            alert("ssss");
+            
+            $http.post('/api/account', $scope.data)
+                .then(
+                    function successCallback(response) {
+                        $scope.data={};
+                        alert("thanh cong");
+                      }, function errorCallback(response) {
+                       alert("that bai");
+                      })
+        }
+});
+
 app.controller("DichVuController", function($scope,$http){
    $scope.data = {
        

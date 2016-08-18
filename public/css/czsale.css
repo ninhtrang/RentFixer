@@ -257,7 +257,7 @@ a:hover {
   background-color: #02571C!important;
 }
 .xanhnhat {
-  color: #8CC13D!important;
+  color: #f69926!important;
 }
 .xanhnhat h4{
   color: #8CC13D!important;
@@ -436,7 +436,7 @@ a.list-subgroup-item:hover, a.list-subgroup-item.active, a.list-subgroup-item.ac
 /* button color */
 
 .btn-danger { 
-  border-color: rgba(34,34,34,.05); background-color: #8CC13D;
+  border-color: rgba(34,34,34,.05); background-color: rgb(230, 84, 15);
 }
 
 .btn-danger:hover { 
@@ -657,7 +657,7 @@ fieldset[disabled] .btn-default.active {
 #footer{
     padding-bottom: 20px!important;
     padding-top: 20px!important;
-    background-color: #02571C!important;
+    background-color: #e6540f!important;
 }
 .btn-circle-sm {
   width: 35px;

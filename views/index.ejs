@@ -14,7 +14,9 @@
     <!-- Bootstrap Core CSS-->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css">
     <!-- Angular-material-->
-    <link rel="stylesheet" href="//cdn.gitcdn.xyz/cdn/angular/bower-material/8a3c74f8b974b66a4975f551f2b2b815c0a2b40e/angular-material.css">
+    <link rel="stylesheet" href="angular-material/angular-material.css">
+      
+<!--      <script src="angular-material/angular-material.min.js"></script>-->
     <!-- Custom Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800 | Merriweather:400,300,300italic,400italic,700,700italic,900,900italic" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
@@ -52,7 +54,7 @@
   </head>
   <body id="page-top" ng-app="RentFixer">
     <div class="se-pre-con"></div>
-    <div ng-init="checkCookies()">
+    <div ng-controller="DangNhap">
       <div id="DangKyForm" role="dialog" class="modal fade">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -61,6 +63,20 @@
                 <button type="button" ng-click="closeDangKy()" class="chutrang close">×</button>
                 <h4 class="biggerfont modal-title chutrang">Đăng ký</h4>
               </div>
+             <div  id="mypanel" class="modal-body">
+                <md-content layout-padding="">
+                    <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Tài khoản</label>
+                        <input  required name="sdt" ng-model="data.taikhoan" autocomplete="off">
+                    </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Mật Khẩu</label>
+                        <input  required name="sdt" ng-model="data.matkhau" autocomplete="off">
+                    </md-input-container>
+                     <md-checkbox ng-model="dongySuDung">Đồng ý điều khoản sử dụng của ProFixer</md-checkbox>
+                 </md-content>   
+                </div>
+<!--
               <div id="mypanel" class="modal-body modal-no-padding">
                 <div ng-show="sdtTonTai" layout="row" layout-align="center center">
                   <p>Số điện thoại này đã được đăng ký!</p>
@@ -118,6 +134,7 @@
                   <md-checkbox ng-model="dongySuDung">Đồng ý điều khoản sử dụng của ProFixer</md-checkbox>
                 </md-content>
               </div>
+-->
               <div class="modal-footer">
                 <button type="submit" ng-disabled="formdangky.$invalid || kiemtraFormDangKy() || !dongySuDung" ng-click="DangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
                 <button type="button" ng-click="closeDangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
@@ -134,6 +151,20 @@
                 <button type="button" ng-click="closeDangNhap()" class="chutrang close">×</button>
                 <h4 class="biggerfont modal-title chutrang">Đăng Nhập</h4>
               </div>
+                
+                <div id="mypanel" class="modal-body">
+                <md-content layout-padding="">
+                    <md-input-container>
+                        <label> <i class="fa xanhnhat padright"></i>Tài khoản</label>
+                        <input  required name="sdt" ng-model="AccountKH.taikhoan" autocomplete="off">
+                    </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa xanhnhat padright"></i>Mật khẩu</label>
+                        <input  required name="sdt" ng-model="AccountKH.matkhau" autocomplete="off">
+                    </md-input-container>
+                 </md-content>   
+                </div>
+<!--
               <div id="mypanel" class="modal-body">
                 <div ng-show="sdtKhongTonTai" layout="row" layout-align="center center">
                   <p>Số điện thoại này không tồn tại!</p>
@@ -164,6 +195,7 @@
                   </div>
                 </md-content>
               </div>
+-->
               <div class="modal-footer">
                 <button type="button" ng-click="showDangKy()" class="marright btn btn-danger"> Đăng ký</button>
                 <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
@@ -498,6 +530,7 @@
       <script src="js/wow.min.js"></script>
       <script src="js/vegas.min.js"></script>
       <script src="angular/angular.js"></script>
+      <script src="angular-material/angular-material.min.js"></script>
       <script src= "javascripts/angular-modules.js"></script>
       <script src= "javascripts/factory/DataFactory.js"></script>
       <script src= "javascripts/FixerListController.js"></script>
@@ -512,7 +545,7 @@
       <script src= "//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.1/angular-cookies.js"></script>
       <script src= "//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
       <script src="//code.angularjs.org/1.4.4/angular-messages.js"></script>
-      <script src= "//cdn.gitcdn.xyz/cdn/angular/bower-material/8a3c74f8b974b66a4975f551f2b2b815c0a2b40e/angular-material.js"></script>
+<!--      <script src= "//cdn.gitcdn.xyz/cdn/angular/bower-material/8a3c74f8b974b66a4975f551f2b2b815c0a2b40e/angular-material.js"></script>-->
       <script src= "//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
       <script src="js/bootstrap-select.min.js"></script>
       <script src="js/nya-bootstrap-select.js"></script>

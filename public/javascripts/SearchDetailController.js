@@ -2,8 +2,9 @@
     var app = angular.module("RentFixer");
     app.controller("SearchDetailController",function(FixerFactory,DataFactory, $scope,$http,$timeout){
        
-        $scope.isSearch=true;
         $scope.loading = true;
+        $scope.isDetail = false;
+        $scope.ngscDcChon = {};
         
         $scope.searchData = {
           tenquan: "",
@@ -67,6 +68,28 @@
             });
         }
         
+        // CHI TIET NGUOI SUA CHUA
+        $scope.show_detail = function(data){
+            $scope.isDetail = true;
+            $scope.ngscDcChon = data;
+            console.log(data);
+        }
+        
+        // CHỌN NGƯỜI SỬA CHỮA
+        $scope.fixerDcChon ={};
+        $scope.chon_ngv = function(data){
+            if ($scope.fixerDcChon.cmnd == data.cmnd) {
+			    $('#'+$scope.fixerDcChon.cmnd).removeClass('bgcheckmark');
+                $scope.fixerDcChon = {};
+			}
+			else{
+                $scope.fixerDcChon = data;
+                $('#'+$scope.fixerDcChon.cmnd).addClass('bgcheckmark');
+        	}
+            
+            console.log($('#'+$scope.fixerDcChon.cmnd));
+            
+        }
 
         
         // TO DO : FILTER NGUOI SUA CHUA THEO GIO
