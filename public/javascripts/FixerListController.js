@@ -38,8 +38,20 @@
 
     });
     
-        app.controller("DangNhap",function($scope,$http,$timeout){
+        app.controller("DangNhap",function($scope,$http,$timeout, AccountFactory){
+        $scope.registed = false;
+        $scope.AccountKH ={
+            taikhoan :"",
+            matkhau : ""
+        };
         
+        $scope.initDataOfDangNhapController = function() {
+            $scope.registed = AccountFactory.checkCookie();
+            $scope.AccountKH.taikhoan = AccountFactory.getTaiKhoan();
+        }
+            
+            
+            
          // DANG NHAP FORM
         $scope.showDangNhap = function(){
 			$('#DangNhapForm').modal({backdrop: 'static', keyboard: false},'show');
@@ -48,33 +60,35 @@
 			$('#DangNhapForm').modal('hide');
 		}
                 
-                
+         $scope.DangNhap = function(){
+              $http.get('api/account?taikhoan='+$scope.AccountKH.taikhoan+'&&matkhau='+$scope.AccountKH.matkhau)
+            .success(function(data) {
+                if(data.length > 0 ){
+                    AccountFactory.setAccountToCookie($scope.AccountKH.taikhoan, $scope.AccountKH.matkhau);
+                    $scope.registed = true;
+                }
+            })
+            .error(function(data) {
+                console.log('Error ' );
+            });
+             
+         }       
         // DANG KY FORM
         $scope.showDangKy = function(){
        $('#DangNhapForm').modal('hide');
 			$('#DangKyForm').modal({backdrop: 'static', keyboard: false},'show');
-//			$scope.khachhang = {
-//				sdt: null,
-//				diachi: null,
-//				ten: null
-//			};
-//			$scope.daxacnhansdt = {
-//				dangky: false,
-//				dangnhap: false
-//			};
-//			$scope.thongbaosdt = {
-//				dangky: null,
-//				dangnhap: null
-//			};
-//			$scope.maxacnhan = {
-//		    	nguoidung: null,
-//		    	hethong: null
-//		    };
-//		    $scope.thongbaomaxacnhan = '';
 		}
 		$scope.closeDangKy = function(){
 			$('#DangKyForm').modal('hide');
 		}
+        
+        
+        // DANG XUAT
+        $scope.DangXuat = function(){
+            AccountFactory.setAccountToCookie(undefined,undefined);
+            $scope.registed = false;
+        }
+        
         
         // DANG KY
            $scope.data = {

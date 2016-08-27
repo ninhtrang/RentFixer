@@ -93,3 +93,44 @@ app.controller("KhachHangController", function($scope,$http){
                       })
         }
 });
+
+app.controller("QuanController", function($scope,$http){
+   $scope.data = {
+       
+   } 
+           $scope.test = function(){
+            alert("ssss");
+            
+            $http.post('/api/quan', $scope.data)
+                .then(
+                    function successCallback(response) {
+                        $scope.data={};
+                        alert("thanh cong");
+                      }, function errorCallback(response) {
+                       alert("that bai");
+                      })
+        }
+});
+
+
+router.get('/getid', function(req, res, next) {
+	yeucaumodel.find({}, function(err, data) {
+		if(err){
+			res.send(err);
+		}
+		if(data.length === 0){
+			res.send('YC001');
+		}else {
+			var lastID = data.slice(-1).pop().mayc;
+			var index =  parseInt(lastID.substring(2));
+			index = index + 1;
+			if(index<10){
+				res.send("YC00"+index);
+			}else if (index<100) {
+				res.send("YC0"+index);
+			}else if(index < 1000){
+				res.send("YC"+index);
+			}
+		}
+	})
+})

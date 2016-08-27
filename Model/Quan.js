@@ -6,4 +6,4 @@ var QuanSchema = new mongoose.Schema({
     tenquan : String,
     tenkhuvuc : String
 });
-module.exports = restful.model('Quan',QuanSchema);
+module.exports = restful.model('quan',QuanSchema);

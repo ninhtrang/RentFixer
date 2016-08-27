@@ -31,11 +31,27 @@
 //             console.log($scope.data.tendichvu);
 //         }
             $scope.Search = function(){
-			$timeout(function(){
-				$('#formTheoNgay').submit();
-			},300);
+//               if ( $scope.kiemtra() == false ){
+//                   alert("Vui lòng nhập đầy đủ thông tin trước khi tìm kiếm");
+//                   return;
+//               }else{
+                   $timeout(function(){
+				    $('#formTheoNgay').submit();
+			        },300);
+//               }
+			
 		}
 
+            // KIỂM TRA GIÁ TRỊ LÚC SEARCH
+            $scope.kiemtra = function(){
+                if($scope.data.tendichvu == "" || $scope.data.tenquan=="" || $scope.data.giobd=="" || $scope.data.giokt=="" ){
+                    return false;  
+                }else{
+                    return true;
+                }
+                    
+            }
+            
             $scope.dsGio= DataFactory.dsGio;
             
     });

@@ -3,7 +3,8 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 
 var DichVuSchema = new mongoose.Schema({
-    tendichvu : String,
+   tenDichVu: {type: String, unique: true},
+	phiTheoGio: Number,
     mota : String
 });
-module.exports = restful.model('DichVu',DichVuSchema);
+module.exports = restful.model('dichvu',DichVuSchema);

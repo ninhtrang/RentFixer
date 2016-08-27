@@ -7,7 +7,7 @@ module.exports.Schema = Schema;
 // Connect to mongo
 function connect() {
 	console.log('mongoDB_driver - connect to db');
-	var url = 'mongodb://Trang:trang829084@ds021884.mlab.com:21884/demo1'
+	var url = 'mongodb://ninhtrang:ninhtrang@ds029725.mlab.com:29725/thuctap'
 	mongoose.connect(url);
 }
 function disconnect() {mongoose.disconnect()}

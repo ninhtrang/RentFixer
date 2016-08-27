@@ -7,3 +7,4 @@ var KhachHangSchema = new mongoose.Schema({
     hinhanh : String
 });
 module.exports = restful.model('KhachHang',KhachHangSchema);
+

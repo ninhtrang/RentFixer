@@ -8,6 +8,7 @@ router.post('/', function(req, res, next) {
            var dichvu = req.body.dichvu;
             var giobd1 = req.body.giobd1;
             var giokt1 = req.body.giokt1;
+    var ngaydat = req.body.newDate;
 
     req.session.tenquan = quan;
     req.session.tendichvu = dichvu;
@@ -25,7 +26,7 @@ router.get('/', function(req, res, next) {
     var ngay = req.session.ngay;
     var giobd = req.session.giobd;
     var giokt = req.session.giokt;
-  	res.render('Search', {tenquan:tenquan,tendichvu:tendichvu,ngay:ngay,giobd:giobd,giokt:giokt });
+  	res.render('Search', {tenquan:tenquan,tendichvu:tendichvu,ngay:ngay,giobd:giobd,giokt:giokt});
 });
 
 module.exports = router;

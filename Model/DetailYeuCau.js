@@ -4,9 +4,8 @@ var mongoose = restful.mongoose;
 
 var DetailYeuCauSchema = new mongoose.Schema({
     idyeucau : String,
-	giobatdau : String,
-	gioketthuc : String,
-	fixer :String,
+	giobatdau : Number,
+	gioketthuc : Number,
 	nhanxet : String,
 	lienlac : String,
 	trangthai :String

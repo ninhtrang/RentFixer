@@ -54,7 +54,7 @@
   </head>
   <body id="page-top" ng-app="RentFixer">
     <div class="se-pre-con"></div>
-    <div ng-controller="DangNhap">
+    <div ng-controller="DangNhap" ng-init="initDataOfDangNhapController()">
       <div id="DangKyForm" role="dialog" class="modal fade">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -198,7 +198,7 @@
 -->
               <div class="modal-footer">
                 <button type="button" ng-click="showDangKy()" class="marright btn btn-danger"> Đăng ký</button>
-                <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
                 <button type="button" ng-click="closeDangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
               </div>
             </form>
@@ -209,7 +209,7 @@
         <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display-->
           <div class="navbar-header">
-            <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="javascript:window.location.href=window.location.href"><img src="img/FixerLogo.jpg" alt="Logo công ty" class="logow"></a>
+            <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="javascript:window.location.href=window.location.href"><img src="img/FixerLogo1.jpg" alt="Logo công ty" class="logow"></a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling-->
           <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
@@ -228,9 +228,10 @@
                   <button type="button" ng-click="showDangNhap()" class="marright btn btn-danger"> Đăng Nhập</button>
                 </div>
                 <div ng-show="registed">
-                  <md-list-item><img alt="Ảnh đại diện" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
+                  <md-list-item>
+                      <img alt="user" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
                     <div class="btn-group pull-right btnlogin">
-                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{khachhang.hoten}}<i class="fa fa-chevron-down marleft"></i></button>
+                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{AccountKH.taikhoan}}<i class="fa fa-chevron-down marleft"></i></button>
                       <ul class="dropdown-menu">
                         <li><a ng-href="/taikhoan?tab=tttk" target="_self">Thông tin tài khoản</a></li>
                         <li><a ng-href="/taikhoan?&amp;tab=lsdh" target="_self">Lịch sử đơn hàng</a></li>
@@ -264,11 +265,11 @@
                       </select>
                       <input id="quannh" type="hidden" name="quan" value="{{data.tenquan}}" class="form-control sb typeahead">
                      
-                        <select ng-model="data.tendichvu"  data-size="7" class="form-control sb fixwdichvu nya-selectpicker"> 
+                        <select ng-model="data.tenDichVu"  data-size="7" class="form-control sb fixwdichvu nya-selectpicker"> 
                           <option value="" disabled>Chọn Dịch Vụ</option>
-                        <option ng-repeat="dichvu in dsDichvu" value="{{dichvu.tendichvu}}">{{dichvu.tendichvu}}</option>
+                        <option ng-repeat="dichvu in dsDichvu" value="{{dichvu.tenDichVu}}">{{dichvu.tenDichVu}}</option>
                       </select>
-                      <input id="dichvunh" type="hidden" name="dichvu" value="{{data.tendichvu}}" class="form-control sb typeahead">
+                      <input id="dichvunh" type="hidden" name="dichvu" value="{{data.tenDichVu}}" class="form-control sb typeahead">
                         
                       <input type="text" name="ngay" placeholder="Chọn ngày" readonly="readonly" autocomplete="off" class="form-control sb dpindex fixWTimeNH">
                         
@@ -277,17 +278,17 @@
 <!--                        <div  class="my-scroll-home">-->
                       <select ng-model="data.giobd" data-size="7" class="form-control sb fixWTime nya-selectpicker">
                         <option value="" disabled>Từ giờ</option>
-                        <option ng-repeat="gio in dsGio" value="{{gio.name}}">{{gio.name}}</option>
+                        <option ng-repeat="gio in dsGio" value="{{gio.value}}">{{gio.name}}</option>
                       </select>
 <!--                            </div>-->
                       <input id="gbdnh" type="hidden" name="giobd1" value="{{data.giobd}}" class="form-control sb typeahead"/>
                       <select ng-model="data.giokt" data-size="7" class="form-control sb fixWTime nya-selectpicker">
                         <option value="" disabled>Đến giờ</option>
-                        <option ng-repeat="gio in dsGio" value="{{gio.name}}">{{gio.name}}</option>
+                        <option ng-repeat="gio in dsGio" value="{{gio.value}}">{{gio.name}}</option>
                       </select>
                       <input id="gktnh" type="hidden" name="giokt1" value="{{data.giokt}}" class="form-control sb typeahead"/>
                     </div>
-                    <input id="submitnh1" type="submit" ng-click="Search()" value="Tìm kiếm" class="form-control sb btn btn-danger">
+                    <input id="submitnh1" type="submit"  ng-click="Search()" value="Tìm kiếm" class="form-control sb btn btn-danger">
                   </li>
                 </ul>
               </form>
@@ -392,7 +393,7 @@
           <div layout="row" layout-align="center center" ng-show="loadingSlick"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
           <slick settings="slickconfig" ng-if="!loadingSlick" class="slicktest">
             <div ng-repeat="fixer in dsFixer | orderBy: &quot;-sonamkinhnghiem&quot;" class="col-xs-6 col-sm-3">
-              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietFixer(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="{{fixer.hinhanh}}" alt="Ảnh đại diện" class="avatar img-responsive">
+              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietFixer(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="fixer.hinhanh" alt="Ảnh đại diện" class="avatar img-responsive">
                   <div class="portfolio-box-caption">
                     <div class="portfolio-box-caption-content">
                       <div class="project-category text-faded"> </div>
@@ -435,7 +436,7 @@
     <div ng-controller="KhachHangController" class="container-fluid">
       <div class="row no-gutter">
         <slick settings="slickconfig" class="slicktest">
-          <div ng-repeat="khachhang in dsKH" class="col-xs-6 col-sm-2"><img ng-src="{{khachhang.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"></div>
+          <div ng-repeat="khachhang in dsKH" class="col-xs-6 col-sm-2"><img ng-src="khachhang.hinhanh" alt="Ảnh đại diện" class="img-responsive"></div>
         </slick>
       </div>
     </div>
@@ -533,6 +534,7 @@
       <script src="angular-material/angular-material.min.js"></script>
       <script src= "javascripts/angular-modules.js"></script>
       <script src= "javascripts/factory/DataFactory.js"></script>
+      <script src= "javascripts/factory/AccountFactory.js"></script>
       <script src= "javascripts/FixerListController.js"></script>
       <script src= "javascripts/SearchController.js"></script>
       <script src= "javascripts/KhachHangController.js"></script>
