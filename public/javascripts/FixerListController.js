@@ -54,9 +54,9 @@
             
          // DANG NHAP FORM
         $scope.showDangNhap = function(){
-			$('#DangNhapForm').modal({backdrop: 'static', keyboard: false},'show');
+			$('#DangNhapForm').modal({backdrop: 'static'},'show');
         }    
-        		$scope.closeDangNhap = function(){
+        $scope.closeDangNhap = function(){
 			$('#DangNhapForm').modal('hide');
 		}
                 
@@ -66,6 +66,7 @@
                 if(data.length > 0 ){
                     AccountFactory.setAccountToCookie($scope.AccountKH.taikhoan, $scope.AccountKH.matkhau);
                     $scope.registed = true;
+                    $scope.closeDangNhap();
                 }
             })
             .error(function(data) {
@@ -75,13 +76,16 @@
          }       
         // DANG KY FORM
         $scope.showDangKy = function(){
-       $('#DangNhapForm').modal('hide');
-			$('#DangKyForm').modal({backdrop: 'static', keyboard: false},'show');
-		}
+           $('#DangNhapForm').modal('hide');
+                $('#DangKyForm').modal({backdrop: 'static'},'show');
+        }
 		$scope.closeDangKy = function(){
 			$('#DangKyForm').modal('hide');
 		}
         
+        $scope.showDanhSachYeuCau = function(){
+            $('#formDanhSachYeuCau').modal({backdrop: 'static'},'show');
+        }
         
         // DANG XUAT
         $scope.DangXuat = function(){

@@ -1,3 +1,7 @@
+function externalValidateData(){
+  return angular.element($("#formTheoNgay")).scope().Search();
+}
+
 (function(){
     var app = angular.module("RentFixer");
      app.controller("SearchController",function(DataFactory,$scope,$http){
@@ -7,6 +11,7 @@
             giobd:"",
             giokt:""
         };
+         $scope.validateData = false;
         $scope.dsQuan = [];
          $http.get('api/quan')
             .success(function(data) {
@@ -25,20 +30,16 @@
             .error(function(data) {
                 console.log('Error ' );
             });
-         
-//         $scope.Search = function(){
-//            console.log($scope.data.tenquan);
-//             console.log($scope.data.tendichvu);
-//         }
             $scope.Search = function(){
-//               if ( $scope.kiemtra() == false ){
-//                   alert("Vui lòng nhập đầy đủ thông tin trước khi tìm kiếm");
-//                   return;
-//               }else{
+               if ( $scope.kiemtra() == false ){
+                   alert("Vui lòng nhập đầy đủ thông tin trước khi tìm kiếm");
+                   return false;
+               }else{
                    $timeout(function(){
 				    $('#formTheoNgay').submit();
 			        },300);
-//               }
+                   return false;
+               }
 			
 		}
 
