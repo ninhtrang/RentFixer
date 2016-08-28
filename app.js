@@ -42,7 +42,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false
 }));
-
+//
 app.use('/nhap',nhapFixer);
 app.use('/nhapquan',nhapQuan);
 app.use('/nhapdichvu',nhapDichvu);
