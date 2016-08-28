@@ -26,7 +26,12 @@ router.get('/', function(req, res, next) {
     var ngay = req.session.ngay;
     var giobd = req.session.giobd;
     var giokt = req.session.giokt;
-  	res.render('Search', {tenquan:tenquan,tendichvu:tendichvu,ngay:ngay,giobd:giobd,giokt:giokt});
+    
+    if(tenquan == undefined) {
+        res.redirect('/');
+    } else {
+        res.render('Search', {tenquan:tenquan,tendichvu:tendichvu,ngay:ngay,giobd:giobd,giokt:giokt});
+    }
 });
 
 module.exports = router;
