@@ -1,6 +1,6 @@
 (function(){
     var app = angular.module("RentFixer");
-    app.controller("SearchDetailController",function(FixerFactory,DataFactory, $scope,$http,$timeout){
+    app.controller("SearchDetailController",function(FixerFactory,DataFactory,AccountFactory, $scope,$http,$timeout){
        
         $scope.loading = true;
         $scope.isDetail = false;
@@ -23,7 +23,7 @@
           tongchiphi : "",
           ngaydatyeucau:""
         };
-        
+        $scope.taikhoanKH = AccountFactory.getTaiKhoan();
         $scope.ngvs = [];
         $scope.dsGio = [];
         $scope.initDataFirstTime = function(tenquan,tendichvu,ngay,giobd,giokt){
@@ -133,6 +133,9 @@
             $scope.loading = true;
             $http.get('api/fixer?diachi.quan='+$scope.searchData.tenquan)
             .success(function(data){
+                 for(var fixer=0;fixer < data.length;fixer++){
+                 data[fixer].ngaysinh = new Date(data[fixer].ngaysinh);
+             }
                 $scope.ngvs = FixerFactory.filterFixerByServiceName(data, $scope.searchData.tendichvu);
                  console.log($scope.ngvs);
                 $scope.loading = false;
@@ -180,37 +183,52 @@
         
         // LƯU YÊU CẦU
         $scope.data ={};
+        
            $scope.luu_yeucau = function(){
-               var dataYC = {
-                    ngaydatyeucau: new Date(),
-                    quan : $scope.searchData.tenquan,
-                    ngaylam : $scope.searchData.ngay,
-                   trangthai : "Bắt đầu", 
-                   hotenTho: $scope.ngscDcChon.hoten,
-                   cmndTho : $scope.ngscDcChon.cmnd,
-                   dichvuyc :  $scope.searchData.tendichvu,
-                   hotenKH : $scope.data.hotenkh,
-                   sodt : $scope.data.sodt,
-                   diachi : $scope.data.diachi,
-                    mota : $scope.data.mota,
-                   sdtTho : $scope.ngscDcChon.sodt,
-                    giobatdau : $scope.giobdNew.value,
-                    gioketthuc : $scope.gioktNew.value,
-                    phidichvu : $scope.searchData.tongchiphi
-                } 
                
-            $http.post('/api/yeucau', dataYC)
-                .then(
-                    function successCallback(response) {
-                        data={};
-                        alert("Bạn đã tạo đơn hàng thành công");
-                      }, function errorCallback(response) {
-                       alert("that bai");
-                          console.log(response);
-                      })
-            $scope.isDonHang = false;
-            $scope.isSearch = true;
-            $scope.isDetail = false;
+               $http.get("/api/getid")
+               .then(
+                function success(response){
+                    var mayc = response.data;
+                    var dataYC = {
+                        mayc: mayc,
+                        ngaydatyeucau: new Date(),
+                        accountKH : $scope.taikhoanKH,
+                        quan : $scope.searchData.tenquan,
+                        ngaylam : $scope.searchData.ngay,
+                        trangthai : "Bắt đầu", 
+                        hotenTho: $scope.ngscDcChon.hoten,
+                        cmndTho : $scope.ngscDcChon.cmnd,
+                        dichvuyc :  $scope.searchData.tendichvu,
+                        hotenKH : $scope.data.hotenKH,
+                        sodt : $scope.data.sodt,
+                        diachi : $scope.data.diachi,
+                        mota : $scope.data.mota,
+                        sdtTho : $scope.ngscDcChon.sodt,
+                        giobatdau : $scope.giobdNew.name,
+                        gioketthuc : $scope.gioktNew.name,
+                        phidichvu : $scope.searchData.tongchiphi
+                    } 
+                $http.post('/api/yeucau', dataYC)
+                    .then(
+                        function successCallback(response) {
+                            data={};
+                            alert("Bạn đã tạo đơn hàng thành công");
+                          }, function errorCallback(response) {
+                           alert("that bai");
+                              console.log(dataYC);
+                              console.log(response);
+                          });
+                $scope.isDonHang = false;
+                $scope.isSearch = true;
+                $scope.isDetail = false;
+                    
+                }, function error(err){
+                    alert("Get Ma DH error.");
+                }
+               
+               );
+               
         }
         
            // Hủy phần đặt yêu cầu

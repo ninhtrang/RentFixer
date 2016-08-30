@@ -19,6 +19,9 @@
             .success(function(data) {
                 console.log(data);
                 $scope.loadingSlick = false;
+             for(var fixer=0;fixer < data.length;fixer++){
+                 data[fixer].ngaysinh = new Date(data[fixer].ngaysinh);
+             }
                 $scope.dsFixer = data;
             })
             .error(function(data) {

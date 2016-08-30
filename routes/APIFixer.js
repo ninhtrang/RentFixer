@@ -1,12 +1,15 @@
 var express  = require('express');
 var router   =  express.Router();
+//var mongoose = require('mongoose');
+
 var NhanVien = require('../Model/Fixer');
 var Quan = require('../Model/Quan');
 var DichVu = require('../Model/DichVu');
 var Account = require('../Model/Account_KH');
 var KhachHang = require('../Model/KhachHang');
 var YeuCau = require('../Model/YeuCau');
-var DetailYeuCau = require('../Model/DetailYeuCau');
+//var YeuCaumodel = mongoose.model('YeuCau', YeuCau);
+//var DetailYeuCau = require('../Model/DetailYeuCau');
 
 NhanVien.methods(['get','put','post','delete']);
 NhanVien.register(router,'/fixer'); 
@@ -26,7 +29,30 @@ KhachHang.register(router,'/khachhang');
 YeuCau.methods(['get','put','post','delete']);
 YeuCau.register(router,'/yeucau');
 
-DetailYeuCau.methods(['get','put','post','delete']);
-DetailYeuCau.register(router,'/detailyeucau');
+
+router.get('/getid', function(req, res, next) {
+	YeuCau.find({}, function(err, data) {
+		if(err){
+			res.send(err);
+		}
+		if(data.length === 0){
+			res.send('YC001');
+		}else {
+			var lastID = data.slice(-1).pop().mayc;
+			var index =  parseInt(lastID.substring(2));
+			index = index + 1;
+			if(index<10){
+				res.send("YC00"+index);
+			}else if (index<100) {
+				res.send("YC0"+index);
+			}else if(index < 1000){
+				res.send("YC"+index);
+			}
+		}
+	})
+});
+
+//DetailYeuCau.methods(['get','put','post','delete']);
+//DetailYeuCau.register(router,'/detailyeucau');
 
 module.exports = router;

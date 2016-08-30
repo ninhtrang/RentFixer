@@ -63,11 +63,13 @@
                     <button type="button" ng-click="closeDanhSachYeuCau()" class="chutrang close">×</button>
                     <h4 class="biggerfont modal-title chutrang">Danh sách yêu cầu</h4>
                   </div>
-                 <div  id="mypanel" class="modal-body">
+                 
+                    
+                    <div  id="mypanel" class="modal-body">
                     <div class="form-group" style="text-align:center">
-                        <span>Tên tài khoản : <label>{{khachHang.taikhoan}}</label></span>
+                        <span>Tên tài khoản : <label>{{taikhoan}}</label></span>
                     </div>
-                    <div class="form-group" style="text-align:center">
+                    <div ng-hide="isNhanXet" class="form-group" >
                         <table class="table table-hover">
                             <thead>
                               <tr>
@@ -76,6 +78,7 @@
                                 <th>Tên Thợ</th>
                                 <th>Dịch vụ</th>
                                 <th>Phí</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -84,19 +87,28 @@
                                     <td>{{yeucau.ngaylam}}</td>
                                     <td>{{yeucau.hotenTho}}</td>
                                     <td>{{yeucau.dichvuyc.join(", ")}}</td>
-                                    <td>{{yeucau.phidichvu}}</td>
-                                    <td><button class="btn btn-success">Nhận xét</button></td>
+                                    <td>{{yeucau.phidichvu | number}} Đ</td>
+                                    <td><button ng-show="yeucau.trangthai == 'Kết thúc'" class="btn btn-success" ng-click="NhanXet(yeucau)">Nhận xét</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div> 
-                     
+                     <div ng-show="isNhanXet" class="form-group">
+                        <label> <i class="fa  xanhnhat padright"></i>Nhận Xét</label>
+                         <textarea rows="4" cols="50" required name="sdt" ng-model="nhanxet" ></textarea>
+                        <button class="marleft btn btn-danger pull-right" type="button" ng-click="SaveNhanXet()" ><i ></i> Lưu</button>
+                    </div>
                  </div>
-                  <div class="modal-footer">
+                  
+                    
+                    <div class="modal-footer">
                     <button type="button" ng-click="closeDanhSachYeuCau()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Close</button>
                   </div>
                 </form>
-              </div>
+              
+                  
+                
+                </div>
             </div>
         </div>
       
@@ -379,7 +391,7 @@
           <div layout="row" layout-align="center center" ng-show="loadingSlick"><i class="fa fa-4x fa-cog fa-spin xanhnhat"></i></div>
           <slick settings="slickconfig" ng-if="!loadingSlick" class="slicktest">
             <div ng-repeat="fixer in dsFixer | orderBy: &quot;-sonamkinhnghiem&quot;" class="col-xs-6 col-sm-3">
-              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietFixer(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="fixer.hinhanh" alt="Ảnh đại diện" class="avatar img-responsive">
+              <div class="thumbnail center-block"><a data-ng-if="!refreshing" ng-click="xemChiTietFixer(fixer.cmnd)" ng-href="#" class="portfolio-box"><img ng-src="{{fixer.hinhanh }}" alt="Ảnh đại diện" class="avatar img-responsive">
                   <div class="portfolio-box-caption">
                     <div class="portfolio-box-caption-content">
                       <div class="project-category text-faded"> </div>
@@ -394,7 +406,7 @@
                     </div>
                     <div class="row">
                     <div class="left padleftngv">
-                      <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{fixer.ngaysinh}}
+                      <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{fixer.ngaysinh | date:'dd/MM/yyyy'}}
                     </div>
                   </div>
                   <div class="row">
@@ -549,7 +561,7 @@
 </html><script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
 <!-- modal-->
 <div id="banggia" role="dialog" class="modal fade">
-  <div class="modal-dialog modal-lg">
+  <div ng-controller="SearchController" class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header bgxanhdam">
@@ -563,16 +575,12 @@
             <tr>
               <th>Dịch vụ</th>
               <th>Phí cơ bản(VNĐ/Giờ)</th>
-              <th>Phụ phí</th>
-              <th>Phí ngoài giờ</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="tc in tieuchi">
-              <td>{{tc.tentieuchi}}</td>
-              <td>{{tc.giachuan | currency:'VNĐ':0}}</td>
-              <td>{{tc.phuphi}}</td>
-              <td>{{tc.phingoaigiokh + '%'}}</td>
+            <tr ng-repeat="tc in dsDichvu">
+              <td>{{tc.tenDichVu}}</td>
+              <td>{{tc.phiTheoGio | currency:'VNĐ':0}}</td>
             </tr>
           </tbody>
         </table><br>

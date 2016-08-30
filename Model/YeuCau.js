@@ -3,20 +3,9 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 
 var YeuCauSchema = new mongoose.Schema({
-//    ngaydatyeucau : Date,
-//    chiphi : Number,
-//    hotenkh : String,
-//    sodtkh : String,
-//    dichvu : String,
-//    diachikh : String,
-//    quan : String,
-//    ngaylam : String,
-//    cmndfixer : String,
-//    hotenfixer : String,
-//    mota : String,
-//    trangthai : String
     mayc : {type: String, unique: true},
     ngaydatyeucau : Date,
+    accountKH : String,
     hotenKH : String,
     sodt : Number,
     email : String,
