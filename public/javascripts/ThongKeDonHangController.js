@@ -1,11 +1,11 @@
 (function(){
     var app = angular.module("RentFixer");
-    app.controller("ThongTinKhachHangController",function($scope,$http, AccountFactory){
+    app.controller("ThongKeDonHangController",function($scope,$http, AccountFactory){
         $scope.active = false;
         $scope.taikhoan;
         $scope.dsYeuCau;
         $scope.isNhanXet = false;
-        
+        $scope.dsYeuCauTheoNgay = [];
         
         $scope.initData = function(){
             if(AccountFactory.checkCookie() == false) {
@@ -18,10 +18,45 @@
             .success(function(data) {
                 console.log(data);
                 $scope.dsYeuCau = data;
+                $scope.filterYeuCau();
+                console.log($scope.dsYeuCauTheoNgay);
             })
             .error(function(data) {
                 console.log('Error ' );
             });
+        }
+        
+        $scope.filterYeuCau = function() {
+            $scope.dsYeuCauTheoNgay = [];
+            
+            for(var i = 0; i < $scope.dsYeuCau.length; i++) {
+                var j = 0;
+                var exists = false;
+                var ngayYeuCau = new Date($scope.dsYeuCau[i].ngaydatyeucau);
+                for(j = 0; j< $scope.dsYeuCauTheoNgay.length; j++) {
+                    
+                    if(ngayYeuCau.getFullYear() == $scope.dsYeuCauTheoNgay[j].ngay.getFullYear()
+                      && ngayYeuCau.getMonth() == $scope.dsYeuCauTheoNgay[j].ngay.getMonth()
+                      && ngayYeuCau.getDate() == $scope.dsYeuCauTheoNgay[j].ngay.getDate()) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists == true) {
+                    $scope.dsYeuCauTheoNgay[j].yeucaus.push($scope.dsYeuCau[i]);
+                } else {
+                    var yeucautheongay = {
+                        ngay: ngayYeuCau,
+                        yeucaus: [],
+                        isShow:false
+                    }
+                    yeucautheongay.yeucaus.push($scope.dsYeuCau[i]);
+                    $scope.dsYeuCauTheoNgay.push(yeucautheongay);
+                }
+            }
+            
+            
+            
         }
          
 
@@ -41,6 +76,10 @@
             } else {
                 $scope.nhanxet = yeucau.nhanxet;
             }
+        }
+        
+        $scope.quayLai = function() {
+            $scope.isNhanXet = false;
         }
         
         

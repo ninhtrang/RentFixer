@@ -125,14 +125,28 @@
              <div  id="mypanel" class="modal-body">
                 <md-content layout-padding="">
                     <md-input-container>
-                        <label> <i class="fa  xanhnhat padright"></i>Tài khoản</label>
+                        <label> <i class="fa  xanhnhat padright"></i>Số điện thoại</label>
                         <input  required name="sdt" ng-model="data.taikhoan" autocomplete="off">
                     </md-input-container>
                      <md-input-container>
                         <label> <i class="fa  xanhnhat padright"></i>Mật Khẩu</label>
                         <input  required name="sdt" ng-model="data.matkhau" autocomplete="off">
                     </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Họ tên</label>
+                        <input  required name="sdt" ng-model="data.hoten" autocomplete="off">
+                    </md-input-container>
+                    <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Email</label>
+                        <input  required name="sdt" ng-model="data.email" autocomplete="off">
+                    </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Địa chỉ</label>
+                        <input  required name="sdt" ng-model="data.diachi" autocomplete="off" style="width: 450px;">
+                    </md-input-container></br>
                      <md-checkbox ng-model="dongySuDung">Đồng ý điều khoản sử dụng của ProFixer</md-checkbox>
+                    <md-checkbox ng-model="dongySuDung">Người sửa chữa</md-checkbox>
+                    <md-checkbox ng-model="dongySuDung">Khách hàng</md-checkbox>
                  </md-content>   
                 </div>
               <div class="modal-footer">
@@ -155,15 +169,24 @@
                 <div id="mypanel" class="modal-body">
                 <md-content layout-padding="">
                     <md-input-container>
-                        <label> <i class="fa xanhnhat padright"></i>Tài khoản</label>
+                        <label> <i class="fa xanhnhat padright"></i>Số điện thoại</label>
                         <input  required name="sdt" ng-model="AccountKH.taikhoan" autocomplete="off">
                     </md-input-container>
                      <md-input-container>
                         <label> <i class="fa xanhnhat padright"></i>Mật khẩu</label>
-                        <input  required name="sdt" ng-model="AccountKH.matkhau" autocomplete="off">
+                        <input type="password" required name="sdt" ng-model="AccountKH.matkhau" autocomplete="off">
                     </md-input-container>
                  </md-content>   
                 </div>
+                <div layout="" layout-sm="column">
+                    <md-input-container style="width:95%">
+                      <label> <a class="i fa fa-shield xanhnhat padright"></a>Mã xác nhận</label>
+                      <input autocomplete="off" ng-model="maxacnhan.nguoidung">
+                    </md-input-container>
+                    <md-button ng-click="layMaXacNhan(1)" ng-disabled="dalayMXNDN" class="md-fab md-mini md-primary chutrang">
+                      <md-tooltip md-direction="left">Lấy mã xác nhận</md-tooltip><i class="fa fa-shield"></i>
+                    </md-button>
+                  </div>
 <!--
               <div id="mypanel" class="modal-body">
                 <div ng-show="sdtKhongTonTai" layout="row" layout-align="center center">
@@ -231,9 +254,17 @@
                   <md-list-item>
                       <img alt="user" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
                     <div class="btn-group pull-right btnlogin">
-                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{AccountKH.taikhoan}}<i class="fa fa-chevron-down marleft"></i></button>
+                      <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{AccountKH.taikhoan}}<i class="fa fa-chevron-1down marleft"></i></button>
                       <ul class="dropdown-menu">
-                        <li style="text-align:center"><button ng-click="showDanhSachYeuCau()" class="btn btn-link btn-sm">Lịch sử đơn hàng</button></li>
+                           <li style="text-align:center">
+                            <button class="btn btn-link btn-sm"><a href="/thong_tin_khach_hang">Thông tin khách hàng</a></button>
+                        </li>
+                        <li style="text-align:center">
+                            <button ng-click="showDanhSachYeuCau()" class="btn btn-link btn-sm">Lịch sử đơn hàng</button>
+                        </li>
+                        <li style="text-align:center">
+                            <button class="btn btn-link btn-sm"><a href="/thong_ke_don_hang">Thống kê đơn hàng</a></button>
+                        </li>
                         <li role="separator" class="divider"></li>
                         <li style="text-align:center"><button ng-click="DangXuat()" class="btn btn-link btn-sm">Thoát</button></li>
                       </ul>
@@ -434,7 +465,7 @@
     <div ng-controller="KhachHangController" class="container-fluid">
       <div class="row no-gutter">
         <slick settings="slickconfig" class="slicktest">
-          <div ng-repeat="khachhang in dsKH" class="col-xs-6 col-sm-2"><img ng-src="khachhang.hinhanh" alt="Ảnh đại diện" class="img-responsive"></div>
+          <div ng-repeat="khachhang in dsKH" class="col-xs-6 col-sm-2"><img ng-src="{{khachhang.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"></div>
         </slick>
       </div>
     </div>
@@ -537,6 +568,7 @@
       <script src= "javascripts/SearchController.js"></script>
       <script src= "javascripts/KhachHangController.js"></script>
       <script src= "javascripts/ThongTinKhachHang.js"></script>
+      <script src= "javascripts/DangNhapController.js"></script>
       <script src="//code.angularjs.org/1.0.8/i18n/angular-locale_vi-vn.js"></script>
       <script src= "//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
       <script src= "//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.min.js"></script>
@@ -558,7 +590,8 @@
       <script src="locales/bootstrap-datepicker.vi.min.js"></script>
       <script src="js/creative.js"></script>
     
-</html><script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
+</html>
+<!--<script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>-->
 <!-- modal-->
 <div id="banggia" role="dialog" class="modal fade">
   <div ng-controller="SearchController" class="modal-dialog modal-lg">

@@ -2,6 +2,7 @@
     var app = angular.module("RentFixer");
     app.controller("SearchDetailController",function(FixerFactory,DataFactory,AccountFactory, $scope,$http,$timeout){
        
+        $scope.dataTimKiem = {};
         $scope.loading = true;
         $scope.isDetail = false;
         $scope.isSearch = false;
@@ -26,6 +27,7 @@
         $scope.taikhoanKH = AccountFactory.getTaiKhoan();
         $scope.ngvs = [];
         $scope.dsGio = [];
+        $scope.dsTuongDong = [];
         $scope.initDataFirstTime = function(tenquan,tendichvu,ngay,giobd,giokt){
             $scope.isSearch = true;  
             $scope.searchData.tenquan = tenquan;
@@ -109,7 +111,7 @@
             
             $scope.searchData.tongchiphi = (($scope.searchData.giotb/60)*($scope.dichvu1.phiTheoGio));
         }
-        
+        2
         // kiểm tra trước lúc search
         
         $scope.Search = function(){
@@ -130,27 +132,83 @@
                 $scope.data.giokt = $scope.gioktNew.name;   
             }
             
+            $scope.dataTimKiem = {
+                gioBD: $scope.giobdNew.value,
+                gioKT: $scope.gioktNew.value,
+                quan: $scope.searchData.tenquan,
+                dichvu: $scope.searchData.tendichvu,
+                ngay: $scope.searchData.ngay
+            }
+            
             $scope.loading = true;
-            $http.get('api/fixer?diachi.quan='+$scope.searchData.tenquan)
+            
+            $http.get('api/fixer?diachi.quan=' + $scope.dataTimKiem.quan)
             .success(function(data){
-                 for(var fixer=0;fixer < data.length;fixer++){
-                 data[fixer].ngaysinh = new Date(data[fixer].ngaysinh);
-             }
-                $scope.ngvs = FixerFactory.filterFixerByServiceName(data, $scope.searchData.tendichvu);
-                 console.log($scope.ngvs);
+                for(var fixer=0;fixer < data.length;fixer++){
+                    data[fixer].ngaysinh = new Date(data[fixer].ngaysinh);
+                }
+                $scope.ngvs = FixerFactory.filterFixerByServiceName(data, $scope.dataTimKiem.dichvu);
+                
+                $scope.filterLichBan($scope.ngvs);
+            })
+            .error(function(data){
+                console.log('tim kiem Error');
+            });
+        }
+        
+        $scope.filterLichBan = function(fixers){
+            
+            $http.post('api/timkiem/lichban', $scope.dataTimKiem)
+            .success(function(dsLichBan){
+                for(var i = 0; i < dsLichBan.length; i++) {
+                    for(var j = 0; j < fixers.length; j++) {
+                        if(dsLichBan[i].cmnd == fixers[j].cmnd) {
+                            fixers.splice(j, 1);
+                            j--;
+                        }    
+                    }
+                }
+                console.log('tim ddddddd222222222');
+                $scope.filterLichLamViec(fixers);
+            })
+            .error(function(data){
+                console.log('tim kiem Error');
+            });
+            
+        }
+        
+        $scope.filterLichLamViec = function(fixers){
+            
+            $http.post('api/timkiem/lichlamviec', $scope.dataTimKiem)
+            .success(function(dsLichLV){
+                for(var i = 0; i < dsLichLV.length; i++) {
+                    for(var j = 0; j < fixers.length; j++) {
+                        if(dsLichLV[i].cmnd == fixers[j].cmnd) {
+                            fixers.splice(j, 1);
+                            j--;
+                        }    
+                    }
+                }
                 $scope.loading = false;
             })
             .error(function(data){
-                console.log('Error ');
+                console.log('tim kiem Error');
             });
+            
         }
         
         // CHI TIET NGUOI SUA CHUA
         $scope.show_detail = function(data){
+            $scope.dsTuongDong =[];
             $scope.isDetail = true;
             $scope.isSearch = false;
             $scope.isDonHang = false; 
             $scope.ngscDcChon = data;
+            for(var fixer=0;fixer < $scope.ngvs.length;fixer++){
+                if($scope.ngvs[fixer].cmnd!= $scope.ngscDcChon.cmnd){
+                    $scope.dsTuongDong.push($scope.ngvs[fixer]);
+                }
+            }
         }
         
         // CHỌN NGƯỜI SỬA CHỮA
@@ -191,15 +249,15 @@
                 function success(response){
                     var mayc = response.data;
                     var dataYC = {
-                        mayc: mayc,
+                        mayc: "YC199",
                         ngaydatyeucau: new Date(),
-                        accountKH : $scope.taikhoanKH,
+                        accountKH : "aaaa",//$scope.taikhoanKH,
                         quan : $scope.searchData.tenquan,
                         ngaylam : $scope.searchData.ngay,
                         trangthai : "Bắt đầu", 
                         hotenTho: $scope.ngscDcChon.hoten,
                         cmndTho : $scope.ngscDcChon.cmnd,
-                        dichvuyc :  $scope.searchData.tendichvu,
+                        dichvuyc :  [$scope.searchData.tendichvu],
                         hotenKH : $scope.data.hotenKH,
                         sodt : $scope.data.sodt,
                         diachi : $scope.data.diachi,
@@ -207,7 +265,9 @@
                         sdtTho : $scope.ngscDcChon.sodt,
                         giobatdau : $scope.giobdNew.name,
                         gioketthuc : $scope.gioktNew.name,
-                        phidichvu : $scope.searchData.tongchiphi
+                        phidichvu : $scope.searchData.tongchiphi,
+                        nhanxet: "",
+                        email: "",
                     } 
                 $http.post('/api/yeucau', dataYC)
                     .then(

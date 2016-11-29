@@ -3,7 +3,6 @@ var router = express.Router();
 
 
 router.get('/', function(req, res, next) {
-    console.log("ssssssaaaaa")
 	var id = req.session.idngv;
     console.log(id);
 

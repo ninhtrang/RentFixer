@@ -16,8 +16,15 @@ var nhapAccount = require('./routes/nhapAcount');
 var nhapKhachHang = require('./routes/nhapKhachHang');
 var nhapYeuCau = require('./routes/Request');
 var nhapDetailYeuCau = require('./routes/DetailRequest');
+var nhapBusyCal = require('./routes/nhapBusyCal');
+var nhapBusyForCus = require('./routes/nhapBusyForCus');
 var xemChiTietFixer = require('./routes/XemChiTietFixer');
+var thongKeDonHang = require('./routes/ThongKeDonHang');
+var thongTinKhachHang = require('./routes/ThongTinKhachHang');
+var google = require('./routes/GoogleAPI');
 var search = require('./routes/Search');
+var timkiem = require('./routes/APISearch');
+var lichlamviec = require('./routes/APILichLamViec');
 var mongoose = require('./Database/MongoDBDriver');
 
 mongoose.connect;
@@ -51,9 +58,17 @@ app.use('/nhapkhachhang',nhapKhachHang);
 app.use('/nhapyeucau',nhapYeuCau);
 app.use('/nhapdetailyeucau',nhapDetailYeuCau);
 app.use('/nguoi_giup_viec', xemChiTietFixer);
+app.use('/thong_ke_don_hang',thongKeDonHang);
+app.use('/thong_tin_khach_hang',thongTinKhachHang);
+app.use('/get_address', google);
 app.use('/search', search);
+
 app.use('/', index);
 app.use('/api',require('./routes/APIFixer'));
+app.use('/api/timkiem', timkiem);
+app.use('/api/lichlamviec', lichlamviec);
+
+
 
 app.use('/favicon.ico',function(req,res,next){
     res.end();

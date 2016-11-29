@@ -420,7 +420,7 @@
   </div>
   <div ng-show="isDetail" class="row content">
     <div>
-<!--      <div ng-repeat="ngv in ngvs" ng-if="checkcmnd(ngv.cmnd)" class="col-md-9 col-md-push-3 content-right">-->
+      <div  class="col-md-9 col-md-push-3 content-right">
         <h4>Thông tin chi tiết</h4>
         <div class="row">
           <div class="col-md-4"><a href="#"><img ng-src="{{ngscDcChon.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
@@ -527,31 +527,34 @@
           </div>
         </div>
         <hr class="hrmargin"/>
-<!--      </div>-->
+      </div>
       <div class="col-md-3 col-md-pull-9 content-left">
         <h4>Nhân viên tương đồng</h4>
-        <div ng-if="ngv_sub1!=null" class="row">
-          <div class="thumbnail sm-img-left"><a href="#" ng-click="show_detail(ngv_sub1)" class="center portfolio-box"><img ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + ngv_sub1.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
+          <li ng-repeat="fixerTuongDong in dsTuongDong">
+        <div class="row">
+          <div class="thumbnail sm-img-left"><a ng-click="show_detail(fixerTuongDong)" class="center portfolio-box"><img ng-src="{{fixerTuongDong.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
             <div class="caption center">
               <div class="row">
                 <div class="left padleft">
-                  <h5 class="i fa fa-user xanhnhat marbtm padright"></h5>{{ngv_sub1.hoten}}
+                  <h5 class="i fa fa-user xanhnhat marbtm padright"></h5>{{fixerTuongDong.hoten}}
                 </div>
                 <div class="right padrightngv"></div>
               </div>
               <div class="row">
                 <div class="left padleft">
-                  <h5 class="i fa fa-briefcase xanhnhat marbtm padright"></h5>{{ngv_sub1.sonamkinhnghiem + ' năm kinh nghiệm'}}
+                  <h5 class="i fa fa-briefcase xanhnhat marbtm padright"></h5>{{fixerTuongDong.sonamkinhnghiem + ' năm kinh nghiệm'}}
                 </div>
               </div>
               <div class="row">
                 <div class="left padleft">
-                  <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{tinh_tuoi_ngv(ngv_sub1.ngaysinh) + ' tuổi'}}
+                  <h5 class="i fa fa-birthday-cake xanhnhat marbtm padright"></h5>{{fixerTuongDong.ngaysinh | date:'dd/MM/yyyy'}}
                 </div>
               </div>
             </div>
           </div>
         </div>
+          </li>
+<!--
         <div ng-if="ngv_sub2!=null" class="row">
           <div class="thumbnail sm-img-left"><a href="#" ng-click="show_detail(ngv_sub2)" class="center portfolio-box"><img ng-src="{{&quot;http://procleaner.vn:3000/public/images/ngv/&quot; + ngv_sub2.hinhanh}}" alt="Ảnh đại diện" class="img-responsive"/></a>
             <div class="caption center">
@@ -574,6 +577,7 @@
             </div>
           </div>
         </div>
+-->
       </div>
     </div>
   </div>
@@ -710,7 +714,7 @@
       
   </body>
     
-    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
+<!--    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>-->
   <section id="footer">
     <div class="container">
       <div class="row">
@@ -760,6 +764,7 @@
       <script src= "javascripts/factory/AccountFactory.js"></script>
       <script src= "javascripts/FixerListController.js"></script>
       <script src= "javascripts/ThongTinKhachHang.js"></script>
+       <script src= "javascripts/DangNhapController.js"></script>
     <script src="js/search.js"></script>
     <!-- Custom Theme JavaScript-->
   </section>

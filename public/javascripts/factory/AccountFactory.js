@@ -1,6 +1,6 @@
 (function(){
     var app = angular.module("RentFixer");
-    app.factory('AccountFactory',function($cookies){
+    app.factory('AccountFactory',function($cookies, $http, $q){
         var service = {};
         
         service.setAccountToCookie = function(taikhoan, password){
@@ -20,6 +20,22 @@
             
             return taikhoan;
         }
+        
+        service.layDiaChiGoogleMapApi = function(lat, lng){
+			var deferred = $q.defer();
+			var toado = {
+				lat: lat,
+				lng: lng
+			}
+			$http.post('/get_address', toado)
+		        .success(function(data) {
+	        		deferred.resolve(data);
+		        }).error(function(data) {
+		            console.log('Error: ' + data);
+        		});
+		    return deferred.promise;
+		}
+        
         return service;
         
         

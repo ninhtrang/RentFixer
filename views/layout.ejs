@@ -20,16 +20,79 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.min.css" type="text/css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css" type="text/css">
     <link rel="stylesheet" href="css/preload.css" type="text/css">
-  </head>
-  <body ng-app="SearchModule">
+
+</head>
+  <body ng-app="RentFixer">
     <div class="se-pre-con"></div>
+      <div ng-controller="ThongTinKhachHangController" ng-init="initData()">
+        <div id="formDanhSachYeuCau" role="dialog" class="modal fade">
+            <div class="modal-dialog" style="width:900px">
+              <div class="modal-content">
+                <form name="formdangky" novalidate>
+                  <div class="modal-header bgxanhdam">
+                    <button type="button" ng-click="closeDanhSachYeuCau()" class="chutrang close">×</button>
+                    <h4 class="biggerfont modal-title chutrang">Danh sách yêu cầu</h4>
+                  </div>
+                 
+                    
+                    <div  id="mypanel" class="modal-body">
+                    <div class="form-group" style="text-align:center">
+                        <span>Tên tài khoản : <label>{{taikhoan}}</label></span>
+                    </div>
+                    <div ng-hide="isNhanXet" class="form-group" >
+                        <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th>Trạng Thái</th>
+                                <th>Ngày Làm</th>
+                                <th>Tên Thợ</th>
+                                <th>Dịch vụ</th>
+                                <th>Phí</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="yeucau in dsYeuCau">
+                                    <td>{{yeucau.trangthai}}</td>
+                                    <td>{{yeucau.ngaylam}}</td>
+                                    <td>{{yeucau.hotenTho}}</td>
+                                    <td>{{yeucau.dichvuyc.join(", ")}}</td>
+                                    <td>{{yeucau.phidichvu | number}} Đ</td>
+                                    <td><button ng-show="yeucau.trangthai == 'Kết thúc'" class="btn btn-success" ng-click="NhanXet()">Nhận xét</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                     <div ng-show="isNhanXet" class="form-group">
+                        <label> <i class="fa  xanhnhat padright"></i>Nhận Xét</label>
+                         <textarea rows="4" cols="50" required name="sdt" ng-model="data.nhanxet" ></textarea>
+                        <button class="marleft btn btn-danger pull-right" type="button" ng-click="SaveNhanXet()" ><i ></i> Lưu</button>
+                    </div>
+                 </div>
+                  
+                    
+                    <div class="modal-footer">
+                    <button type="button" ng-click="closeDanhSachYeuCau()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Close</button>
+                  </div>
+                </form>
+              
+                  
+                
+                </div>
+            </div>
+        </div>
+      
+    </div>
+      
+   <div ng-controller="DangNhap" ng-init="initDataOfDangNhapController()">   
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+       
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
       <div ng-controller="loginController" class="container">
         <div class="navbar-header">
           <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
         </div>
         <div id="navbar" ng-init="checkCookies()" class="navbar-collapse collapse">
-          <div layout="row" layout-align="space-between center"><a ng-href="/" target="_self"><img src="img/logo.png" alt="logo Công Ty" class="logow"></a>
+          <div layout="row" layout-align="space-between center"><a ng-href="/" target="_self"><img src="img/FixerLogo1.jpg" alt="logo Công Ty" class="logow"></a>
             <div ng-if="!registed">
               <button type="button" ng-click="showDangKy()" class="marright btn btn-danger"> Đăng ký</button>
               <button type="button" ng-click="showDangNhap()" class="marright btn btn-danger"> Đăng Nhập</button>
@@ -37,13 +100,12 @@
             <div ng-show="registed">
               <md-list-item><img alt="user" ng-src="{{ &quot;img/NGV.jpg&quot;  }}" class="md-avatar">
                 <div class="btn-group">
-                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{khachhang.hoten}}<i class="fa fa-chevron-down marleft"></i></button>
+                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-danger dropdown-toggle">{{AccountKH.taikhoan}}<i class="fa fa-chevron-down marleft"></i></button>
                   <ul class="dropdown-menu">
-                    <li><a ng-href="/taikhoan?tab=tttk" target="_self">Thông tin tài khoản</a></li>
-                    <li><a ng-href="/taikhoan?&amp;tab=lsdh" target="_self">Lịch sử đơn hàng</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#" ng-click="DangXuat()">Thoát</a></li>
-                  </ul>
+                        <li style="text-align:center"><button ng-click="showDanhSachYeuCau()" class="btn btn-link btn-sm">Lịch sử đơn hàng</button></li>
+                        <li role="separator" class="divider"></li>
+                        <li style="text-align:center"><button ng-click="DangXuat()" class="btn btn-link btn-sm">Thoát</button></li>
+                      </ul>
                 </div>
               </md-list-item>
             </div>
@@ -58,6 +120,20 @@
                   <button type="button" ng-click="closeDangKy()" class="chutrang close">×</button>
                   <h4 class="biggerfont modal-title chutrang">Đăng ký</h4>
                 </div>
+                  <div  id="mypanel" class="modal-body">
+                <md-content layout-padding="">
+                    <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Tài khoản</label>
+                        <input  required name="sdt" ng-model="data.taikhoan" autocomplete="off">
+                    </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa  xanhnhat padright"></i>Mật Khẩu</label>
+                        <input  required name="sdt" ng-model="data.matkhau" autocomplete="off">
+                    </md-input-container>
+                     <md-checkbox ng-model="dongySuDung">Đồng ý điều khoản sử dụng của ProFixer</md-checkbox>
+                 </md-content>   
+                </div>
+<!--
                 <div id="mypanel" class="modal-body">
                   <div ng-show="sdtTonTai" layout="row" layout-align="center center">
                     <p>Số điện thoại này đã được đăng ký!</p>
@@ -115,6 +191,7 @@
                     <md-checkbox ng-model="dongySuDung" class="dongySuDung">Đồng ý điều khoản sử dụng của ProCleaner</md-checkbox>
                   </md-content>
                 </div>
+-->
                 <div class="modal-footer">
                   <button type="submit" ng-disabled="formdangky.$invalid || kiemtraFormDangKy() || !dongySuDung" ng-click="DangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
                   <button type="button" ng-click="closeDangKy()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
@@ -131,6 +208,20 @@
                   <button type="button" ng-click="closeDangNhap()" class="chutrang close">×</button>
                   <h4 class="biggerfont modal-title chutrang">Đăng Nhập</h4>
                 </div>
+                  
+                   <div id="mypanel" class="modal-body">
+                <md-content layout-padding="">
+                    <md-input-container>
+                        <label> <i class="fa xanhnhat padright"></i>Tài khoản</label>
+                        <input  required name="sdt" ng-model="AccountKH.taikhoan" autocomplete="off">
+                    </md-input-container>
+                     <md-input-container>
+                        <label> <i class="fa xanhnhat padright"></i>Mật khẩu</label>
+                        <input  required name="sdt" ng-model="AccountKH.matkhau" autocomplete="off">
+                    </md-input-container>
+                 </md-content>   
+                </div>
+<!--
                 <div id="mypanel" class="modal-body">
                   <div ng-show="sdtKhongTonTai" layout="row" layout-align="center center">
                     <p>Số điện thoại này không tồn tại!</p>
@@ -161,8 +252,9 @@
                     </div>
                   </md-content>
                 </div>
+-->
                 <div class="modal-footer">
-                  <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap(1)" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
+                  <button type="button" ng-disabled="formdangnhap.$invalid || kiemtraFormDangNhap()" ng-click="DangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-check"></i> Đồng ý</button>
                   <button type="button" ng-click="closeDangNhap()" class="marleft btn btn-danger pull-right"><i class="fa fa-remove"></i> Hủy</button>
                 </div>
               </form>
@@ -171,19 +263,25 @@
         </div>
       </div>
     </nav>
+      </div>
       
-      
-      
+   <div ng-controller="FixerDetailController" class="container wrapper">
+          
+          /// write here
+          
+          
+  </div>
+      </div>
   </body>
     
-    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>
+<!--    <script type='text/javascript'>window._sbzq||function(e){e._sbzq=[];var t=e._sbzq;t.push(["_setAccount",32700]);var n=e.location.protocol=="https:"?"https:":"http:";var r=document.createElement("script");r.type="text/javascript";r.async=true;r.src=n+"//static.subiz.com/public/js/loader.js";var i=document.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)}(window);</script>-->
   <section id="footer">
     <div class="container">
       <div class="row">
         <div class="left">
           <div class="form-inline">
             <h5 class="form-group i fa fa-copyright padright chutrang"> </h5>
-            <h5 class="form-group chutrang">Copyright by ProCleaner</h5>
+            <h5 class="form-group chutrang">Copyright by ProFixer</h5>
           </div>
         </div>
         <div class="right pull-right"><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-facebook"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-twitter"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-google-plus"></i></a><a href="#" class="btn btn-circle-sm btn-default marright"><i class="fa fa-linkedin"></i></a></div>
@@ -216,7 +314,16 @@
     <script src="js/cancelableq.js"></script>
     <script src="js/bootstrap-select.min.js"></script>
     <script src="js/nya-bootstrap-select.js"></script>
-    <script src="angular/core.js"></script>
+<!--    <script src="angular/core.js"></script>-->
+      <script src= "javascripts/angular-modules.js"></script>
+      
+      <script src= "javascripts/factory/FixerFactory.js"></script>
+      <script src= "javascripts/factory/DataFactory.js"></script>
+      <script src= "javascripts/factory/AccountFactory.js"></script>
+      <script src= "javascripts/FixerDetailController.js"></script>
+      <script src= "javascripts/LoginController.js"></script><script src= "javascripts/FixerListController.js"></script>
+      <script src= "javascripts/ThongTinKhachHang.js"></script>
+<!--      <script src="angular/angular.js"></script>-->
     <script src="js/search.js"></script>
     <!-- Custom Theme JavaScript-->
   </section>

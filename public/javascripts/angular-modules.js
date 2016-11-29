@@ -4,5 +4,6 @@
                               'ui.bootstrap',
                               'slickCarousel',
                               'ngRoute',
-                              'ngCookies']);
+                              'ngCookies',
+                             'ngAnimate']);
 }());
