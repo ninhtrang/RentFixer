@@ -24,6 +24,7 @@ var thongTinKhachHang = require('./routes/ThongTinKhachHang');
 var google = require('./routes/GoogleAPI');
 var search = require('./routes/Search');
 var timkiem = require('./routes/APISearch');
+var email = require('./routes/APIEmail');
 var lichlamviec = require('./routes/APILichLamViec');
 var mongoose = require('./Database/MongoDBDriver');
 
@@ -67,6 +68,7 @@ app.use('/', index);
 app.use('/api',require('./routes/APIFixer'));
 app.use('/api/timkiem', timkiem);
 app.use('/api/lichlamviec', lichlamviec);
+app.use('/api/email', email);
 
 
 
