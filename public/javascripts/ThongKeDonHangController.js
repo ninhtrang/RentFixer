@@ -13,7 +13,8 @@
             }
             
             $scope.taikhoan = AccountFactory.getTaiKhoan();
-            
+            $scope.hoten = AccountFactory.getHoTen();
+        
             $http.get('api/yeucau?accountKH='+$scope.taikhoan)
             .success(function(data) {
                 console.log(data);
@@ -24,6 +25,8 @@
             .error(function(data) {
                 console.log('Error ' );
             });
+            
+            
         }
         
         $scope.filterYeuCau = function() {
@@ -32,7 +35,12 @@
             for(var i = 0; i < $scope.dsYeuCau.length; i++) {
                 var j = 0;
                 var exists = false;
-                var ngayYeuCau = new Date($scope.dsYeuCau[i].ngaydatyeucau);
+                var ngayYeuCau = new Date();
+                var ngayLamInfo = $scope.dsYeuCau[i].ngaylam.split("/");
+                ngayYeuCau.setDate(ngayLamInfo[0]);
+                ngayYeuCau.setMonth(parseInt(ngayLamInfo[1]) - 1);
+                ngayYeuCau.setFullYear(ngayLamInfo[2]);
+                
                 for(j = 0; j< $scope.dsYeuCauTheoNgay.length; j++) {
                     
                     if(ngayYeuCau.getFullYear() == $scope.dsYeuCauTheoNgay[j].ngay.getFullYear()

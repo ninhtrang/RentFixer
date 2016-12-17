@@ -8,8 +8,6 @@ var DichVu = require('../Model/DichVu');
 var Account = require('../Model/Account_KH');
 var KhachHang = require('../Model/KhachHang');
 var YeuCau = require('../Model/YeuCau');
-//var BusyCal = require('../Model/BusyCal');
-//var BusyForCus = require('../Model/BusyForCus');
 
 NhanVien.methods(['get','put','post','delete']);
 NhanVien.register(router,'/fixer'); 
@@ -35,27 +33,6 @@ YeuCau.register(router,'/yeucau');
 //BusyForCus.methods(['get','put','post','delete']);
 //BusyForCus.register(router,'/BusyForCus');
 
-router.get('/getid', function(req, res, next) {
-	YeuCau.find({}, function(err, data) {
-		if(err){
-			res.send(err);
-		}
-		if(data.length === 0){
-			res.send('YC001');
-		}else {
-			var lastID = data.slice(-1).pop().mayc;
-			var index =  parseInt(lastID.substring(2));
-			index = index + 1;
-			if(index<10){
-				res.send("YC00"+index);
-			}else if (index<100) {
-				res.send("YC0"+index);
-			}else if(index < 1000){
-				res.send("YC"+index);
-			}
-		}
-	})
-});
 
 //DetailYeuCau.methods(['get','put','post','delete']);
 //DetailYeuCau.register(router,'/detailyeucau');

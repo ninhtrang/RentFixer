@@ -13,7 +13,7 @@
             }
             
             $scope.taikhoan = AccountFactory.getTaiKhoan();
-            
+            $scope.hoten = AccountFactory.getHoTen();
             $http.get('api/yeucau?accountKH='+$scope.taikhoan)
             .success(function(data) {
                 console.log(data);

@@ -19,6 +19,7 @@ var FixerSchema = new mongoose.Schema({
     sonamkinhnghiem : Number,
     motakinhnghiem : String,
     hinhanh : String,
-    danhgia : String
+    danhgia : String,
+    xacnhan: Boolean
 });
 module.exports = restful.model('tho',FixerSchema);

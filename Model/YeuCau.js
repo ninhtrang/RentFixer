@@ -3,7 +3,7 @@ var restful = require('node-restful');
 var mongoose = restful.mongoose;
 
 var YeuCauSchema = new mongoose.Schema({
-    mayc : String,
+   
     ngaydatyeucau : Date,
     accountKH : String,
     hotenKH : String,
@@ -23,4 +23,4 @@ var YeuCauSchema = new mongoose.Schema({
     nhanxet : String,
 	trangthai:String
 });
-module.exports = restful.model('yeucau3',YeuCauSchema);
+module.exports = restful.model('yeucau',YeuCauSchema);

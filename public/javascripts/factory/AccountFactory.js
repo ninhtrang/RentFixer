@@ -3,9 +3,10 @@
     app.factory('AccountFactory',function($cookies, $http, $q){
         var service = {};
         
-        service.setAccountToCookie = function(taikhoan, password){
+        service.setAccountToCookie = function(taikhoan, password,hoten){
             $cookies.put("taikhoan", taikhoan);
             $cookies.put("password", password);
+            $cookies.put("hoten",hoten);
         }
         
         service.checkCookie = function(){
@@ -21,6 +22,10 @@
             return taikhoan;
         }
         
+        service.getHoTen = function(){
+            var hoten = $cookies.get("hoten");
+            return hoten;
+        }
         service.layDiaChiGoogleMapApi = function(lat, lng){
 			var deferred = $q.defer();
 			var toado = {

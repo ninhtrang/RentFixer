@@ -3,29 +3,34 @@
 app.controller("DangNhap",function($scope,$http,$timeout, AccountFactory){
             
         $scope.data = {
-               taikhoan: "",
-               matkhau: "",
-               hoten: "",
-               email: "",
-               diachi: "",
-               
-           } 
+            cmnd: "",
+            taikhoan: "",
+            matkhau: "",
+            hoten: "",
+            email: "",
+            diachi: ""
+        } 
+        $scope.dangKiFixer = false;
             
         $scope.registed = false;
         $scope.AccountKH ={
             taikhoan :"",
-            matkhau : ""
+            matkhau : "",
+            hoten :""
         };
         
         $scope.initDataOfDangNhapController = function() {
             $scope.registed = AccountFactory.checkCookie();
             $scope.AccountKH.taikhoan = AccountFactory.getTaiKhoan();
+            $scope.AccountKH.hoten = AccountFactory.getHoTen();
         }
             
             
             
          // DANG NHAP FORM
         $scope.showDangNhap = function(){
+            $scope.AccountKH.taikhoan="";
+            $scope.AccountKH.matkhau="";
 			$('#DangNhapForm').modal({backdrop: 'static'},'show');
         }    
         $scope.closeDangNhap = function(){
@@ -36,7 +41,8 @@ app.controller("DangNhap",function($scope,$http,$timeout, AccountFactory){
               $http.get('api/account?taikhoan='+$scope.AccountKH.taikhoan+'&&matkhau='+$scope.AccountKH.matkhau)
             .success(function(data) {
                 if(data.length > 0 ){
-                    AccountFactory.setAccountToCookie($scope.AccountKH.taikhoan, $scope.AccountKH.matkhau);
+               AccountFactory.setAccountToCookie($scope.AccountKH.taikhoan, $scope.AccountKH.matkhau,data[0].hoten);
+                    $scope.AccountKH.hoten = AccountFactory.getHoTen();
                     $scope.registed = true;
                     $scope.closeDangNhap();
                 }
@@ -88,15 +94,53 @@ app.controller("DangNhap",function($scope,$http,$timeout, AccountFactory){
         
         // DANG KY
            
-           $scope.DangKy = function(){
-            $http.post('/api/account', $scope.data)
+        $scope.DangKy = function(){
+            if($scope.dangKiFixer) {
+                $scope.dangKiLamFixer();
+            } else {
+                $scope.dangKiKhachHang();
+            }
+        }
+        
+        $scope.dangKiLamFixer = function() {
+            
+            var fixerData = {
+                   cmnd: $scope.data.cmnd,
+                   hoten: $scope.data.hoten,
+                   email: $scope.data.email,
+                   sodt: $scope.data.sodt,
+                   diachi: $scope.data.diachi
+            }
+            
+            $http.post('/api/fixer', fixerData)
                 .then(
                     function successCallback(response) {
                         $scope.data={};
                         alert("Bạn đã đăng ký thành công!");
                       }, function errorCallback(response) {
                        alert("Bạn đã đăng ký thất bại!");
-                      })
+                      });
         }
+        
+        $scope.dangKiKhachHang = function() {
+            var KHData = {
+                   taikhoan: $scope.data.taikhoan,
+                   matkhau: $scope.data.matkhau,
+                   hoten: $scope.data.hoten,
+                   email: $scope.data.email,
+                   sodt: $scope.data.sodt,
+                   diachi: $scope.data.diachi
+            }
+            
+            $http.post('/api/account', KHData)
+                .then(
+                    function successCallback(response) {
+                        $scope.data={};
+                        alert("Bạn đã đăng ký thành công!");
+                      }, function errorCallback(response) {
+                       alert("Bạn đã đăng ký thất bại!");
+                      });
+        }
+        
     });
 }());

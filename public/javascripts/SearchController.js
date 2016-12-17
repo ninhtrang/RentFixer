@@ -34,6 +34,7 @@ function externalValidateData(){
             });
             $scope.Search = function(){
                 console.log($scope.data.giobd);
+                console.log($scope.data.giokt);
                if ( $scope.kiemtra() == false ){
                    alert("Vui lòng nhập đầy đủ thông tin trước khi tìm kiếm");
                    return false;
@@ -41,7 +42,12 @@ function externalValidateData(){
                 if($scope.KTGio() == false){
                     alert("Giờ kết thúc phải lớn hơn giờ bắt đầu! ");
                     return false;
-                }else{
+                }
+                if($scope.KTGioLe() == false){
+                alert("Thời gian làm việc phải là 1h,2h,3h,..Không được lẻ! ");
+                return false;
+            }
+                else{
                    $timeout(function(){
 				    $('#formTheoNgay').submit();
 			        },300);
@@ -51,22 +57,24 @@ function externalValidateData(){
 		}
             // Ktra giobd co lon hon giokt ko
           $scope.KTGio = function(){
-//              for(var giofixer = 0; giofixer < DataFactory.dsGio.length; giofixer++ ){
-//                if(DataFactory.dsGio[giofixer].name == $scope.data.giobd)
-//                    {
-//                        $scope.giobdNew = DataFactory.dsGio[giofixer];
-//                    }
-//                if(DataFactory.dsGio[giofixer].name == $scope.data.giokt)
-//                    {
-//                        $scope.gioktNew = DataFactory.dsGio[giofixer];
-//                    }
-//            }
+
+              $scope.data.giobd = parseInt($scope.data.giobd);
+              $scope.data.giokt = parseInt($scope.data.giokt);
               if($scope.data.giobd >= $scope.data.giokt){
                   return false;
               }else{
                   return true;
               }
           }  
+          $scope.KTGioLe = function(){
+             $scope.data.giobd = parseInt($scope.data.giobd);
+              $scope.data.giokt = parseInt($scope.data.giokt);
+              if((($scope.data.giokt - $scope.data.giobd)%60)==0){
+                  return true;
+              }else{
+                  return false;
+              }
+         }
             
 
             // KIỂM TRA GIÁ TRỊ LÚC SEARCH

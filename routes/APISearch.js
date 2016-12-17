@@ -22,8 +22,20 @@ router.post('/lichban', function(req, res, next) {
     lichbantho.find({
         ngay: dataTimKiem.ngay,
         $or:[
-            {giobd : {$gte:dataTimKiem.gioBD, $lt:dataTimKiem.gioKT}},
-            {giokt : {$gt:dataTimKiem.gioBD, $lte:dataTimKiem.gioKT}},
+            {
+                giobd : {
+                    $gte:dataTimKiem.gioBD,
+                    $lt:dataTimKiem.gioKT
+                }
+            },
+            
+            {
+                giokt : {
+                    $gt:dataTimKiem.gioBD, 
+                    $lte:dataTimKiem.gioKT
+                }
+            },
+            
             {
                 giobd : { $lte:dataTimKiem.gioBD},
                 giokt : {$gte:dataTimKiem.gioKT}
@@ -52,21 +64,34 @@ router.post('/lichlamviec', function(req, res, next) {
             ngay: req.body.ngay
         }
     lichlamviectho.find({
-        ngay: dataTimKiem.ngay,
+        ngay: dataTimKiem.ngay
+        ,
         $or:[
-            {giobd : {$gte:dataTimKiem.gioBD, $lt:dataTimKiem.gioKT}},
-            {giokt : {$gt:dataTimKiem.gioBD, $lte:dataTimKiem.gioKT}},
+            {
+                giobd : {
+                    $gte:dataTimKiem.gioBD, 
+                    $lt:dataTimKiem.gioKT
+                }
+            },
+            {
+                giokt : {
+                    $gt:dataTimKiem.gioBD,
+                    $lte:dataTimKiem.gioKT
+                }
+            },
             {
                 giobd : { $lte:dataTimKiem.gioBD},
                 giokt : {$gte:dataTimKiem.gioKT}
             }
         ]
+        
     }, function (err, dsLichLV) {
+        
+        
         if (err){
             res.send(err);
             return;
         }
-        
         res.json(dsLichLV);
         
     });
